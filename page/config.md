@@ -18,11 +18,11 @@ The latter allows you to plug in values that you would have defined here.
              `prepath` to an empty string. Finally, adjust this if you want the
              deployed page to be in a subfolder e.g.: `YourPackage.jl/web/`.
 -->
-@def title       = "Estimates of Revenue Shares"
+@def title       = "Revenue Shares for European Countries"
 @def prepath     = "nace4europe"
 @def description = """
                    It combines information of Eurostat and Orbis to produce
-                   estimates of revenue shares at 4- and 2-digits level.
+                   estimates of revenue shares at 4- and 2-digits level (NACE rev. 2).
                    """
 @def authors     = "Martin Alfaro"
 
@@ -95,7 +95,7 @@ NOTE:
                     you can also set it for individual sections by specifying
                     the width argument: `\begin{:section, ..., width=10}`.
 -->
-@def section_width = 10
+@def section_width = 12
 
 <!-- COLOR PALETTE
 You can use Hex, RGB or SVG color names; these tools are useful to choose:

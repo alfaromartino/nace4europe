@@ -2,13 +2,37 @@
      ABOUT
     ============================== -->
 \begin{section}{title="Contents", name="content"}
+(1) [Summary](#summ) \\
+(1) [Links for Downloading the Estimates](#sec0) \\
+(2) [Roadmap of Code](#sec1) \\
+&ensp; &ensp; (2a) [Eurostat -- Cleaning](#sec2) \\  
+&ensp; &ensp; (2b) [To GitHub](#sec3) \\ 
+&ensp; &ensp; (2c) [To GitHub](#sec3) \\ 
 
-(1) [Steps to be Taken](#sec1) \\
-(2) [Eurostat](#sec2) \\  
-(3) [To GitHub](#sec3) \\  \\ \\
+The **countries** covered are: Austria, Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy, 
+Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine.  \\ \\
+
 The code has been written in \figure{path="/assets/logo_julia.png", width="10%", style="border-radius:5px;"}
+and the page created with [PkgPage.jl](https://github.com/tlienart/PkgPage.jl)
 \end{section}
 
+<!-- ==============================
+     SUMMARY
+     ============================== -->
+\begin{section}{title="Summary"}\label{summ}
+
+
+
+\end{section}
+
+
+<!-- ==============================
+     ESTIMATES
+     ============================== -->
+\begin{section}{title="Links for Downloading the Estimates"}\label{sec0}
+
+
+\end{section}
 <!-- ==============================
      GETTING STARTED
      ============================== -->
