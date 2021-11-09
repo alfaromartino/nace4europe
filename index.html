@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- META -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Martin Alfaro">
+  <title>Estimates of Revenue Shares</title>
+
+  <link rel="icon" type="image/png"  href="/nace4europe/assets/favicon.ico">
+
+  <!-- CSS -->
+  
+   <link rel="stylesheet" href="/nace4europe/libs/highlight/styles/atom-one-dark.css">
+   
+  <link rel="stylesheet" href="/nace4europe/css/bootstrap.min.css">
+  <style>.bg-primary {
+  background-color: #3f6388 !important;
+}
+
+a {
+  color: #2669DD;
+}
+
+a:hover {
+  color: teal;
+}
+
+.section-bg-color {
+  background-color: #f6f8fa;
+}
+
+footer a {
+  color: cornflowerblue;
+}
+
+
+header {
+  margin-top: 0px !important;
+}
+
+
+
+.jumbotron {
+  background-image: url("assets/diag2.jpg");
+  background-repeat: repeat;
+}
+
+
+/* CODE ADJUSTMENTS */
+
+pre code.hljs {
+  border-radius: 10px;
+}
+
+pre code.hljs.plaintext {
+  margin-left: 15px;
+}
+</style>
+  <link rel="stylesheet" href="/nace4europe/css/custom.css">
+
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+</head>
+<body id="page-top">
+  <!-- {{insert nav.html}} -->
+  <header class="text-white text-center">
+  
+    <div class="jumbotron jumbotron-fluid container-fluid bg-primary">
+  
+    <h1>Estimates of Revenue Shares</h1>
+    <div class="lead">It combines information of Eurostat and Orbis to produce
+estimates of revenue shares at 4- and 2-digits level.
+</div>
+    
+      <a class="name_format" href="https://sites.google.com/view/alfaromartino/" target="_blank" rel="noopener noreferrer" data-size="large" aria-label="View on GitHub">Martin Alfaro</a>
+    
+    
+  </div>
+</header>
+
+  <!-- Content appended here -->
+<div class="franklin-content"><section id="content" class="scrollspy section-bg-color">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <h2>Contents</h2></p>
+<p>&#40;1&#41; <a href="#sec1">Steps to be Taken</a> <br/> &#40;2&#41; <a href="#sec2">Eurostat</a> <br/>   &#40;3&#41; <a href="#sec3">To GitHub</a> <br/> <br/> <br/> The code has been written in <figure class="figure">
+  <img src="/nace4europe/assets/logo_julia.png" alt="" class="figure-img img-fluid " width="10%" style="border-radius:5px;">
+  
+</figure>
+       </div>
+    </div>
+  </div>
+</section>
+<section id="steps_to_be_taken" class="scrollspy">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <h2>Steps to be Taken</h2><a id="sec1" class="anchor"></a></p>
+<pre><code class="language-julia-repl">julia&gt; using Statistics
+julia&gt; using DataFrames
+julia&gt; using CSV</code></pre>
+<br/>
+<p>      </div>
+    </div>
+  </div>
+</section>
+<section id="eurostat" class="scrollspy section-bg-color">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <h2>Eurostat</h2><a id="sec2" class="anchor"></a></p>
+<p>      </div>
+    </div>
+  </div>
+</section>
+<section id="showing_code" class="scrollspy">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <h2>Showing Code</h2></p>
+<pre><code class="language-julia">ctry&#61;Dict&#40;&#91;
+&#40;&quot;Austria&quot;, &quot;AT&quot;&#41;, &#40;&quot;Bulgaria&quot;, &quot;BG&quot;&#41;, &#40;&quot;Croatia&quot;, &quot;HR&quot;&#41;, &#40;&quot;Czech&quot;, &quot;CZ&quot;&#41;, &#40;&quot;Finland&quot;, &quot;FI&quot;&#41;,
+&#40;&quot;France&quot;, &quot;FR&quot;&#41;, &#40;&quot;Germany&quot;, &quot;DE&quot;&#41;, &#40;&quot;Great Britain&quot;, &quot;UK&quot;&#41; ,&#40;&quot;Hungary&quot;, &quot;HU&quot;&#41;,&#40;&quot;Italy&quot;, &quot;IT&quot;&#41;, &#40;&quot;Norway&quot;, &quot;NO&quot;&#41;,
+&#40;&quot;Poland&quot;, &quot;PL&quot;&#41;, &#40;&quot;Portugal&quot;, &quot;PT&quot;&#41;, &#40;&quot;Romania&quot;, &quot;RO&quot;&#41;, &#40;&quot;Serbia&quot;, &quot;RS&quot;&#41;, &#40;&quot;Slovakia&quot;, &quot;SK&quot;&#41;, &#40;&quot;Slovenia&quot;, &quot;SI&quot;&#41;,
+&#40;&quot;Spain&quot;, &quot;ES&quot;&#41;, &#40;&quot;Sweden&quot;, &quot;SE&quot;&#41;, &#40;&quot;Ukraine&quot;, &quot;UA&quot;&#41;&#93;&#41;
+
+ctry&#61;Dict&#40;lowercase.&#40;&#91;keys&#40;ctry&#41;...&#93;&#41;.&#61;&gt; &#91;values&#40;ctry&#41;...&#93;&#41;
+dn&#61;DataFrame&#40;nctry&#61;&#91;keys&#40;ctry&#41;...&#93;,cctry&#61;&#91;values&#40;ctry&#41;...&#93;&#41;
+dn.ind&#61;LinearIndices&#40;1:length&#40;dn.cctry&#41;&#41; #numerical index of the country
+
+yr&#61;2018; #baseline year</code></pre>
+<pre><code class="language-julia">function euroclean&#40;yr&#41;
+	#sbs&#61;DataFrame&#40;CSV.File&#40;&quot;sbs_na_ind_r2_1_Data.csv&quot;; select&#61;&#91;:TIME,:GEO,:INDIC_SB,:NACE_R2,:Value&#93;&#41;&#41;
+    sbs&#61;DataFrame&#40;CSV.File&#40;&quot;&#36;&#40;homedir&#40;&#41;&#41;\\Desktop\\ORBIS\\eurostat\\turnover_calc\\sbs_na_ind_r2_1_Data.csv&quot;; select&#61;&#91;:TIME,:GEO,:INDIC_SB,:NACE_R2,:Value&#93;&#41;&#41;
+
+	#we clean the dataset a little
+	df&#61;sbs&#91;&#40;in&#40;dn.cctry&#41;.&#40;sbs.GEO&#41;&#41; .&amp; &#40;sbs.TIME.&gt;2007&#41;,:&#93; ; df&#61;df&#91;df.INDIC_SB.&#61;&#61;&quot;V12110&quot;,:&#93; #V12110 is turnover
+	df&#61;DataFrame&#40;year&#61;df&#91;:,:TIME&#93;,ctry&#61;df&#91;:,:GEO&#93;,nace&#61;df&#91;:,:NACE_R2&#93;,prod&#61;df&#91;:,:Value&#93;&#41;
+	df&#61;df&#91;df.year.&#61;&#61;yr,:&#93; ; df&#61;df&#91;&#40;startswith&#41;.&#40;df.nace,&quot;C&quot;&#41;,:&#93; ;
+	df.prod&#61;replace.&#40;df.prod, &quot;,&quot; &#61;&gt; &quot;&quot;&#41; #the data is presented with a comma
+	&#91;df.nace&#91;i&#93;&#61;replace&#40;df.nace&#91;i&#93;, &quot;C&quot; &#61;&gt; &quot;&quot; &#41; for i in eachindex&#40;df.nace&#41; if isequal&#40;df.nace&#91;i&#93;,&quot;C&quot;&#41;&#61;&#61;0&#93;
+
+	df&#91;:,:erev&#93;.&#61;tryparse.&#40;Float64,string.&#40;df.prod&#41;&#41; ; df&#61;df&#91;:,Not&#40;&quot;prod&quot;&#41;&#93;
+	&#91;df.erev&#91;i&#93;&#61;df.erev&#91;i&#93;*1e6 for i in eachindex&#40;df.erev&#41; if isnothing&#40;df.erev&#91;i&#93;&#41;&#61;&#61;0&#93; # value is in millions, so we convert them into units
+	edf&#61;copy&#40;df&#91;df.nace.&#33;&#61;&quot;C&quot;,:&#93;&#41;
+
+	#we separate values  according to nace4, nace3,nace2 &#40;it includes missing values&#41;
+	#cstr indicates whether the cell only includes numbers &#40;i.e. it&#39;s an industry category&#41;
+	function cstr&#40;a&#41;  return tryparse&#40;Float64, a&#41;&#33;&#61;&#61; nothing ?  false : true end
+		edf&#91;:,:nace4&#93;.&#61;&quot;&quot; ; edf&#91;:,:nace3&#93;.&#61;&quot;&quot; ; edf&#91;:,:nace2&#93;.&#61;&quot;&quot;
+		&#91;edf.nace4&#91;i&#93;&#61;edf.nace&#91;i&#93; for i in eachindex&#40;edf.nace&#41; if &#40;&#40;length&#40;edf.nace&#91;i&#93;&#41;&#61;&#61;4&#41; &amp; &#40;cstr&#40;edf.nace&#91;i&#93;&#41;&#61;&#61;0&#41;&#41;.&#61;&#61;1&#93;
+		&#91;edf.nace4&#91;i&#93;&#61;edf.nace&#91;i&#93; for i in eachindex&#40;edf.nace&#41; if &#40;&#40;length&#40;edf.nace&#91;i&#93;&#41;&#61;&#61;4&#41; &amp; &#40;cstr&#40;edf.nace&#91;i&#93;&#41;&#61;&#61;0&#41;&#41;.&#61;&#61;1&#93;
+		&#91;edf.nace3&#91;i&#93;&#61;edf.nace&#91;i&#93; for i in eachindex&#40;edf.nace&#41; if &#40;&#40;length&#40;edf.nace&#91;i&#93;&#41;&#61;&#61;3&#41; &amp; &#40;cstr&#40;edf.nace&#91;i&#93;&#41;&#61;&#61;0&#41;&#41;.&#61;&#61;1&#93;
+		&#91;edf.nace2&#91;i&#93;&#61;edf.nace&#91;i&#93; for i in eachindex&#40;edf.nace&#41; if &#40;&#40;length&#40;edf.nace&#91;i&#93;&#41;&#61;&#61;2&#41; &amp; &#40;cstr&#40;edf.nace&#91;i&#93;&#41;&#61;&#61;0&#41;&#41;.&#61;&#61;1&#93;
+
+		edf4&#61;edf&#91;edf.nace4.&#33;&#61;&quot;&quot;,:&#93;
+		edf3&#61;edf&#91;edf.nace3.&#33;&#61;&quot;&quot;,Not&#40;&#91;&quot;nace4&quot;&#93;&#41;&#93;
+		edf2&#61;edf&#91;edf.nace2.&#33;&#61;&quot;&quot;,Not&#40;&#91;&quot;nace4&quot;,&quot;nace3&quot;&#93;&#41;&#93;
+		dff4&#61;copy&#40;edf4&#41;
+
+		&#91;dff4.nace3&#91;i&#93;&#61;SubString&#40;dff4.nace4&#91;i&#93;,1:3&#41; for i in eachindex&#40;dff4.nace4&#41;&#93;
+		&#91;dff4.nace2&#91;i&#93;&#61;SubString&#40;dff4.nace4&#91;i&#93;,1:2&#41; for i in eachindex&#40;dff4.nace4&#41;&#93;
+
+		edff3&#61;copy&#40;edf3&#91;:,&#91;:year,:ctry,:nace3,:erev&#93;&#93;&#41; ; edff3&#61;rename&#33;&#40;edff3, :erev &#61;&gt; :erev33&#41;
+		edff2&#61;copy&#40;edf2&#91;:,&#91;:year,:ctry,:nace2,:erev&#93;&#93;&#41; ; edff2&#61;rename&#33;&#40;edff2, :erev &#61;&gt; :erev22&#41;
+		dff4&#61;leftjoin&#40;dff4,edff3,on&#61;&#91;:year,:ctry,:nace3&#93;&#41;
+		dff4&#61;leftjoin&#40;dff4,edff2,on&#61;&#91;:year,:ctry,:nace2&#93;&#41;
+		dff4&#61;dff4&#91;:,Not&#40;&#91;:nace&#93;&#41;&#93;
+		dff4&#61;dff4&#91;dff4.erev.&#33;&#61;0.0,:&#93;
+	return dff4
+end
+
+
+function missi&#40;df&#41;
+	df&#91;:,:mis4&#93;.&#61;0 ; &#91;&#40;if df.erev&#91;i&#93;&#61;&#61;nothing df.mis4&#91;i&#93;&#61;1 end&#41; for i in eachindex&#40;df.ctry&#41;&#93;
+	df&#91;:,:mis33&#93;.&#61;0 ; &#91;&#40;if df.erev33&#91;i&#93;&#61;&#61;nothing df.mis33&#91;i&#93;&#61;1 end&#41; for i in eachindex&#40;df.ctry&#41;&#93;
+	df&#91;:,:mis22&#93;.&#61;0 ; &#91;&#40;if df.erev22&#91;i&#93;&#61;&#61;nothing df.mis22&#91;i&#93;&#61;1 end&#41; for i in eachindex&#40;df.ctry&#41;&#93;
+	df&#91;:,:mis&#93;.&#61;0 ; &#91;&#40;if &#40; &#40;df.mis4&#91;i&#93;&#61;&#61;1&#41; &amp; &#40;df.mis22&#61;&#61;1&#41; &#41; df.mis&#91;i&#93;&#61;1 end&#41; for i in eachindex&#40;df.ctry&#41;&#93;
+
+	df&#61;transform&#40;DataFrames.groupby&#40;df,&#91;:year,:ctry,:nace2&#93;&#41;, nrow &#61;&gt; :nr2&#41;
+	df&#61;mapcols&#40;col -&gt; replace&#40;col, nothing&#61;&gt;missing&#41;, df&#41;
+return df
+end
+
+
+function missi2&#40;df,x,y&#41;
+	df&#91;:,:mis&#93;.&#61;0 ; &#91;&#40;if df&#91;:,Symbol&#40;&quot;&#36;x&quot;&#41;&#93;&#91;i&#93;&#61;&#61;y df.mis&#91;i&#93;&#61;1 end&#41; for i in eachindex&#40;df.ctry&#41;&#93;
+	df&#61;transform&#40;DataFrames.groupby&#40;df,&#91;:ctry,:nace2&#93;&#41;,:mis &#61;&gt; sum &#61;&gt; :mis2&#41;
+	df&#61;transform&#40;DataFrames.groupby&#40;df,&#91;:ctry,:nace2&#93;&#41;, nrow &#61;&gt; :nr2&#41;
+
+	remsh&#40;x,y&#41;&#61;sum&#40;x&#91;i&#93;*&#40;x&#91;i&#93;&#33;&#61;y&#41; for i in eachindex&#40;x&#41; if &#40;ismissing&#40;x&#91;i&#93;&#41;&#61;&#61;0&#41;&#41;
+	df&#61;transform&#40;DataFrames.groupby&#40;df,&#91;:ctry,:nace2&#93;&#41;,Symbol&#40;&quot;&#36;x&quot;&#41; &#61;&gt; &#40; x -&gt; 1-remsh&#40;x,-1&#41; &#41; &#61;&gt; :remsh2&#41;
+	df&#61;mapcols&#40;col -&gt; replace&#40;col, nothing&#61;&gt;missing&#41;, df&#41;
+
+	return df
+end</code></pre>
+<pre><code class="language-julia">dff4&#61;euroclean&#40;yr&#41;  
+dff4&#61;missi&#40;dff4&#41;  
+sort&#33;&#40;dff4,&#91;:ctry,:nace4&#93;&#41;
+###############				 	no problem with eurostat at sh42						#############################
+	dff4&#91;:,:rsh42&#93;.&#61;-2.0
+	&#91;&#40;&#40;dff4.nr2&#91;i&#93;&#61;&#61;1&#41; &amp;&amp; &#40;dff4.rsh42&#91;i&#93;&#61;1&#41;&#41; for i in eachindex&#40;dff4.erev&#41;&#93; #only one missing value, so share within nace3 must be one
+	allowmissing&#33;&#40;dff4&#41;
+	&#91;&#40;&#40; dff4.nr2&#91;i&#93;&#33;&#61;1 &#41; &amp;&amp; &#40;dff4.rsh42&#91;i&#93;&#61;dff4.erev&#91;i&#93;/dff4.erev22&#91;i&#93;&#41;&#41; for i in eachindex&#40;dff4.erev&#41;&#93;
+	&#91;&#40; &#40;ismissing&#40;dff4.rsh42&#91;i&#93;&#41;&#61;&#61;1&#41; &amp;&amp; &#40;dff4.rsh42&#91;i&#93;&#61;-1&#41; &#41; for i in eachindex&#40;dff4.erev&#41;&#93;
+	dff4&#61;missi2&#40;dff4,&quot;rsh42&quot;,-1&#41;
+
+
+
+
+
+###############				 	PARTITION OF THE SAMPLE						#############################
+dg0&#61;dff4&#91;&#40;dff4.mis2.&#61;&#61;0&#41;,:&#93;  #ALREADY SOLVED
+	#we correct for nace42 not summing one &#40;just in case there are problems with the decimals&#41;
+	dg0&#61;transform&#40;DataFrames.groupby&#40;dg0,&#91;:ctry,:nace2&#93;&#41;,:rsh42 &#61;&gt; sum &#61;&gt; :Tnewsh2&#41;
+	dg0.rsh42.&#61;dg0.rsh42 ./dg0.Tnewsh2
+
+
+dg1&#61;dff4&#91;&#40;dff4.mis2.&#33;&#61;0&#41;,:&#93; # SOME PROBLEM, WE&#39;LL PARTITION THIS IN TURN
+
+
+
+###########################################################################################################
+############################################################################################################
+###############				 	2&#41; WE USE RELATIVE SHARES FROM PREVIOUS YEARS					#############################
+############################################################################################################
+#########################################################################################################
+
+
+
+#we try to recover first some of the nace42 &#40;not using nace43&#41;
+	function solveprob1&#40;yr,dg1&#41;
+		dg2&#61;copy&#40;unique&#40;dg1&#91;:,&#91;:ctry,:nace4,:rsh42,:mis2&#93;&#93;&#41;&#41; #they have some type  of missing value
+		dga&#61;copy&#40;unique&#40;dg1&#91;dg1.mis.&#33;&#61;0,&#91;:ctry,:nace4,:remsh2,:rsh42,:mis2&#93;&#93;&#41;&#41; #they have some type  of missing value
+		dga&#61;rename&#33;&#40;dga,:mis2&#61;&gt;:mid2&#41;
+
+		a1&#61;missi&#40;euroclean&#40;yr&#41;&#41; ; a1&#61;dropmissing&#40;a1&#41;
+		a1&#61;leftjoin&#40;dga,a1,on&#61;&#91;:ctry,:nace4&#93;&#41; ; a1&#61;a1&#91;:,Not&#40;&#91;:year,:nace3,:erev33&#93;&#41;&#93; ; &#91;a1.nace2&#91;i&#93;&#61;SubString&#40;a1.nace4&#91;i&#93;,1:2&#41; for i in eachindex&#40;a1.nace4&#41;&#93;
+		a1&#91;:,:rr2&#93;.&#61;a1.erev ./ a1.erev22
+
+
+		if isempty&#40;a1&#41;&#61;&#61;1
+			display&#40;&quot;empty set&quot;&#41;
+		else
+		a1&#91;:,:chek&#93;.&#61;ismissing.&#40;a1.rr2&#41;
+		a1&#61;transform&#40;DataFrames.groupby&#40;a1,&#91;:ctry,:nace2&#93;&#41;,:chek &#61;&gt; &#40;x -&gt; sum&#40;skipmissing&#40;x&#41;&#41;&#41; &#61;&gt; :todrope,nrow &#61;&gt; :todropo&#41;
+		a1&#61;a1&#91;&#40;a1.todrope.&#33;&#61;a1.todropo&#41;,:&#93;
+		if size&#40;a1&#41;&#91;1&#93;.&#61;&#61;0
+			display&#40;&quot;no additional values&quot;&#41; ;		return dg1
+			else
+
+			a1&#61;a1&#91;:,Not&#40;&#91;:chek,:todrope,:todropo&#93;&#41;&#93;
+
+			a1&#61;transform&#40;DataFrames.groupby&#40;a1,&#91;:ctry,:nace2&#93;&#41;,
+			:rr2 &#61;&gt; &#40;x -&gt; sum&#40;skipmissing&#40;x&#41;&#41;&#41; &#61;&gt; :Tnewsh2,
+			:rr2 &#61;&gt; &#40;x -&gt; sum&#40;&#40;ismissing.&#40;x&#41;.&#61;&#61;0&#41;&#41; &#41; &#61;&gt;:nmis2&#41;
+
+			&#91;&#40; &#40;a1.nmis2&#91;i&#93;&#61;&#61;a1.mid2&#91;i&#93;&#41; &amp;&amp; &#40;a1.rr2&#91;i&#93;&#61;a1.rr2&#91;i&#93;/a1.Tnewsh2&#91;i&#93; *a1.remsh2&#91;i&#93;&#41; &#41; for i in eachindex&#40;a1.erev&#41;&#93;
+
+			&#91;&#40; &#40; &#40;a1.nmis2&#91;i&#93;&#61;&#61;a1.mid2&#91;i&#93;-1&#41; &amp; &#40;a1.Tnewsh2&#91;i&#93;&lt;a1.remsh2&#91;i&#93;&#41; &#41;
+			&amp;&amp; &#40;a1.rr2&#91;i&#93;&#61;a1.rr2&#91;i&#93;&#41; &#41; for i in eachindex&#40;a1.erev&#41; if &#40;ismissing&#40;a1.rr2&#91;i&#93;&#61;&#61;0&#41;&#41;&#93;
+
+			&#91;&#40; &#40; &#40;a1.nmis2&#91;i&#93;&#61;&#61;a1.mid2&#91;i&#93;-1&#41; &amp; &#40;a1.Tnewsh2&#91;i&#93;&lt;a1.remsh2&#91;i&#93;&#41; &#41;
+			&amp;&amp; &#40;a1.rr2&#91;i&#93;&#61;a1.remsh2&#91;i&#93;-a1.Tnewsh2&#91;i&#93;&#41;  &#41; for i in eachindex&#40;a1.erev&#41; if &#40;ismissing&#40;a1.rr2&#91;i&#93;&#61;&#61;1&#41;&#41;&#93;
+
+
+			#we merge the data
+			a1&#61;a1&#91;:,&#91;:ctry,:nace4,:rr2&#93;&#93;
+			dg2&#61;leftjoin&#40;dg2,a1,on&#61;&#91;:ctry,:nace4&#93;&#41;
+			dg2&#91;:,:nace2&#93;.&#61;&quot;&quot;
+			&#91;dg2.nace2&#91;i&#93;&#61;SubString&#40;dg2.nace4&#91;i&#93;,1:2&#41; for i in eachindex&#40;dg2.nace4&#41;&#93;
+			dg2&#91;:,:nace3&#93;.&#61;&quot;&quot;
+			&#91;dg2.nace3&#91;i&#93;&#61;SubString&#40;dg2.nace4&#91;i&#93;,1:3&#41; for i in eachindex&#40;dg2.nace4&#41;&#93;
+
+			&#91;&#40; &#40;&#40;dg2.rsh42&#91;i&#93;&#61;&#61;-1&#41; &amp; &#40;ismissing&#40;dg2.rr2&#91;i&#93;&#41;&#61;&#61;0&#41;&#41; &amp;&amp; &#40;dg2.rsh42&#91;i&#93;&#61;dg2.rr2&#91;i&#93;&#41;&#41; for i in eachindex&#40;dg2.rr2&#41;&#93;
+
+			dg2&#61;missi2&#40;dg2,&quot;rsh42&quot;,-1&#41; ; dg2&#61;dg2&#91;:,Not&#40;:rr2&#41;&#93;
+			end
+			end
+			return dg2
+	end
+
+
+dg1&#61;solveprob1&#40;2017,dg1&#41; ; display&#40;sum&#40;dg1.mis&#41;&#41;
+dg1&#61;solveprob1&#40;2016,dg1&#41; ; display&#40;sum&#40;dg1.mis&#41;&#41;
+dg1&#61;solveprob1&#40;2015,dg1&#41; ; display&#40;sum&#40;dg1.mis&#41;&#41;
+dg1&#61;solveprob1&#40;2014,dg1&#41; ; display&#40;sum&#40;dg1.mis&#41;&#41;
+
+
+dg1u&#61;dg1&#91;&#40;dg1.mis2.&#33;&#61;0&#41;,:&#93; ; dg1s&#61;dg1&#91;&#40;dg1.mis2.&#61;&#61;0&#41;,:&#93;
+
+
+
+
+###########################################################################################################
+############################################################################################################
+###############				 	3&#41; WE USE RELATIVE SHARES FROM ORBIS					#############################
+############################################################################################################
+#########################################################################################################
+
+############################################################################################################
+######################															############################
+###############				 	DATA FROM ORBIS					#############################
+#################																##############################
+############################################################################################################
+
+
+		function cleanrev&#40;dg,dn,var&#41; #this is for data from 2018, dn is the name of the country, var is the name of the variable &#40;wage, rev, etc&#41;
+		  df&#61;DataFrame&#40;nace&#61;dg&#91;:,3&#93;,id&#61;dg&#91;:,4&#93;,xx1&#61;dg&#91;:,6&#93;,xx2&#61;dg&#91;:,5&#93;,xx3&#61;dg&#91;:,7&#93;,ctry&#61;dn&#41; #we use 2018
+
+		  	df&#91;:,:nace4&#93;.&#61;string.&#40;df.nace&#41;
+
+			mapcols&#40;col -&gt; replace&#33;&#40;col, &quot;n.a.&quot;&#61;&gt; &quot;-1&quot;&#41;, df&#41;
+			mapcols&#40;col -&gt; replace&#33;&#40;col, &quot;&quot;&#61;&gt; &quot;-1&quot;&#41;, df&#41;
+			df.xx1&#61;coalesce.&#40;df.xx1, &quot;-1&quot;&#41; ; 			df.xx2&#61;coalesce.&#40;df.xx2, &quot;-1&quot;&#41; ; 			df.xx3&#61;coalesce.&#40;df.xx2, &quot;-1&quot;&#41;
+			df.xx1&#61;tryparse.&#40;Float64,string.&#40;df.xx1&#41;&#41;; 	df.xx2&#61;tryparse.&#40;Float64,string.&#40;df.xx2&#41;&#41; ;  df.xx3&#61;tryparse.&#40;Float64,string.&#40;df.xx3&#41;&#41;
+
+			###we now create different DFs to identify at least one value of xxenues
+			df&#61;df&#91;&#40;df.xx1 .&gt;0&#41; .| &#40;df.xx2 .&gt;0 .| &#40;df.xx3 .&gt;0&#41;&#41;, :&#93;
+			df&#91;:,:xx&#93;.&#61;df.xx1
+			&#91;&#40;if df.xx1&#91;i&#93;&lt;&#61;0 df.xx&#91;i&#93;&#61;df.xx2&#91;i&#93; end&#41; for i in eachindex&#40;df.xx&#41;&#93;
+			&#91;&#40;if df.xx&#91;i&#93;&lt;&#61;0 df.xx&#91;i&#93;&#61;df.xx3&#91;i&#93; end&#41; for i in eachindex&#40;df.xx&#41;&#93;
+			&#91;&#40;if df.xx&#91;i&#93;&lt;&#61;0 df.xx&#91;i&#93;&#61;-1 end&#41; for i in eachindex&#40;df.xx&#41;&#93;
+			df&#61;unique&#40;df&#91;:,&#91;:ctry,:id,:nace4,:xx&#93;&#93;&#41;
+
+			df&#91;:,:nace2&#93;.&#61;&quot;&quot; ; df&#91;:,:nace3&#93;.&#61;&quot;&quot;
+			&#91;df.nace2&#91;i&#93;&#61;SubString&#40;df.nace4&#91;i&#93;,1:2&#41; for i in eachindex&#40;df.nace4&#41;&#93;
+			&#91;df.nace3&#91;i&#93;&#61;SubString&#40;df.nace4&#91;i&#93;,1:3&#41; for i in eachindex&#40;df.nace4&#41;&#93;
+			df&#61;df&#91;df.xx.&gt;0,:&#93;
+
+			df&#61;unique&#40;df&#41;
+			df&#61;rename&#40;df, :xx &#61;&gt; Symbol&#40;&quot;&#36;var&quot;&#41;&#41;
+
+			return df
+		  end
+
+dfs&#61;&#91;DataFrame&#40;CSV.File&#40;&quot;&#36;&#40;homedir&#40;&#41;&#41;\\Desktop\\ORBIS\\allcountries\\&#36;&#40;value&#41;_2019_rev_manuf.csv&quot;&#41;&#41;  for &#40;key,value&#41; in enumerate&#40;dn.nctry&#41;&#93; # to create a vector with dfs
+&#91;dfs&#91;i&#93;&#61;cleanrev&#40;dfs&#91;i&#93;,dn&#91;i,:cctry&#93;,Symbol&#40;&quot;orev&quot;&#41;&#41; for i in eachindex&#40;dn.ind&#41;&#93;
+odf&#61;copy&#40;dfs&#41; ; odf&#61;vcat&#40;odf...&#41;
+
+		odf&#61;transform&#40;DataFrames.groupby&#40;odf,&#91;:nace2,:ctry&#93;&#41;,:orev &#61;&gt; sum &#61;&gt; :Orev2&#41;
+		odf&#61;transform&#40;DataFrames.groupby&#40;odf,&#91;:nace3,:ctry&#93;&#41;,:orev &#61;&gt; sum &#61;&gt; :Orev3&#41;
+		odf&#61;transform&#40;DataFrames.groupby&#40;odf,&#91;:nace4,:ctry&#93;&#41;,:orev &#61;&gt; sum &#61;&gt; :Orev4&#41;
+
+
+odf&#61;unique&#40;odf&#91;:,contains.&#40;names&#40;odf&#41;,&#91;r&quot;ctry|Or|nace|sh&quot;&#93;&#41;&#93;&#41;
+odf&#91;:,:year&#93;.&#61;yr
+
+
+odf4&#61;copy&#40;odf&#41;
+sort&#33;&#40;odf4,&#91;:ctry,:nace4&#93;&#41;
+
+dg1u&#61;leftjoin&#40;dg1u,odf4&#91;:,&#91;:ctry,:nace4,:Orev4&#93;&#93;,on&#61;&#91;:ctry,:nace4&#93;&#41;
+&#91;&#40; &#40;ismissing&#40;dg1u.Orev4&#91;i&#93;&#41;&#61;&#61;1&#41; &amp;&amp; &#40;dg1u.Orev4&#91;i&#93;&#61;0&#41; &#41; for i in eachindex&#40;dg1u.ctry&#41;&#93;
+
+
+dg1u&#61;transform&#40;DataFrames.groupby&#40;dg1u,&#91;:ctry,:nace2&#93;&#41;, &#91;:Orev4,:rsh42&#93; &#61;&gt; &#40; &#40;x,z&#41; -&gt; sum&#40;x&#91;i&#93;*&#40;z&#91;i&#93;&#61;&#61;-1&#41; for i in eachindex&#40;x&#41;&#41; &#41; &#61;&gt; :Orev2&#41;
+dg1u&#91;:,:osh42&#93;.&#61;dg1u.Orev4./dg1u.Orev2 .* dg1u.remsh2 .* &#40;dg1u.rsh42.&#61;&#61;-1&#41;
+
+&#91;&#40; &#40;dg1u.rsh42&#91;i&#93;&#61;&#61;-1&#41; &amp;&amp; &#40;dg1u.rsh42&#91;i&#93;&#61;dg1u.osh42&#91;i&#93;&#41; &#41; for i in eachindex&#40;dg1u.ctry&#41;&#93;
+
+
+###########################################################################################################
+############################################################################################################
+###############				 	4&#41; WE MERGE ALL DATA					#############################
+############################################################################################################
+#########################################################################################################
+
+#dg0 was originally solved, dg1 was having at least one missing at nace2 level
+#dg1u is what we couldn&#39;t solve through previous years of eurostat
+
+vect&#61;&#91;:ctry,:nace2,:nace4,:rsh42&#93;
+df42&#61;vcat&#40;dg0&#91;:,vect&#93;,dg1s&#91;:,vect&#93;,dg1u&#91;:,vect&#93;&#41;
+sort&#33;&#40;df42,&#91;:ctry,:nace4&#93;&#41;
+replace&#33;&#40;df42.rsh42, NaN&#61;&gt;0&#41;
+#CSV.write&#40;&quot;&#36;&#40;homedir&#40;&#41;&#41;\\Desktop\\ORBIS\\eurostat\\turnover_calc\\newcode02\\nace42.csv&quot;,df42&#41;</code></pre>
+<pre><code class="plaintext code-output">could not open file /home/runner\Desktop\ORBIS\eurostat\turnover_calc\newcode02\page\_assets\scripts\page01.jl
+</code></pre>
+<p>      </div>
+    </div>
+  </div>
+</section>
+<section id="to_github" class="scrollspy section-bg-color">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <h2>To GitHub</h2><a id="sec3" class="anchor"></a>       </div>
+    </div>
+  </div>
+</section>
+<footer class="py-5 bg-dark">
+  <div class="container">
+    <p class="m-0 text-center text-white">&copy; Martin Alfaro. <a href="https://sites.google.com/view/alfaromartino/">Personal Website</a>.</p>
+  </div>
+</footer>
+</div><!-- CONTENT ENDS HERE -->
+  
+  
+      <script src="/nace4europe/libs/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>
+
+  
+  <script src="/nace4europe/libs/simple-scrollspy.min.js"></script>
+  <script>
+  window.onload = function () {
+    scrollSpy('#navbarResponsive', {
+      sectionClass: '.scrollspy',
+      menuActiveTarget: '.nav-link',
+      offset: 100
+    })
+  }
+  </script>
+  </body>
+</html>
