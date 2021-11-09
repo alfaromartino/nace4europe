@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Martin Alfaro">
-  <title>Estimates of Revenue Shares</title>
+  <title>Revenue Shares for European Countries</title>
 
   <link rel="icon" type="image/png"  href="/nace4europe/assets/favicon.ico">
 
@@ -67,9 +67,9 @@ pre code.hljs.plaintext {
   
     <div class="jumbotron jumbotron-fluid container-fluid bg-primary">
   
-    <h1>Estimates of Revenue Shares</h1>
+    <h1>Revenue Shares for European Countries</h1>
     <div class="lead">It combines information of Eurostat and Orbis to produce
-estimates of revenue shares at 4- and 2-digits level.
+estimates of revenue shares at 4- and 2-digits level (NACE rev. 2).
 </div>
     
       <a class="name_format" href="https://sites.google.com/view/alfaromartino/" target="_blank" rel="noopener noreferrer" data-size="large" aria-label="View on GitHub">Martin Alfaro</a>
@@ -82,20 +82,39 @@ estimates of revenue shares at 4- and 2-digits level.
 <div class="franklin-content"><section id="content" class="scrollspy section-bg-color">
   <div class="container">
     <div class="row">
-      <div class="col-lg-10 mx-auto">
-        <h2>Contents</h2></p>
-<p>&#40;1&#41; <a href="#sec1">Steps to be Taken</a> <br/> &#40;2&#41; <a href="#sec2">Eurostat</a> <br/>   &#40;3&#41; <a href="#sec3">To GitHub</a> <br/> <br/> <br/> The code has been written in <figure class="figure">
+      <div class="col-lg-12 mx-auto">
+        <h2>Contents</h2> &#40;1&#41; <a href="#summ">Summary</a> <br/> &#40;1&#41; <a href="#sec0">Links for Downloading the Estimates</a> <br/> &#40;2&#41; <a href="#sec1">Roadmap of Code</a> <br/> &ensp; &ensp; &#40;2a&#41; <a href="#sec2">Eurostat – Cleaning</a> <br/> &ensp; &ensp; &#40;2b&#41; <a href="#sec3">To GitHub</a> <br/> &ensp; &ensp; &#40;2c&#41; <a href="#sec3">To GitHub</a> <br/> </p>
+<p>The <strong>countries</strong> covered are: Austria, Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy,  Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine. <br/> <br/></p>
+<p>The code has been written in <figure class="figure">
   <img src="/nace4europe/assets/logo_julia.png" alt="" class="figure-img img-fluid " width="10%" style="border-radius:5px;">
   
 </figure>
-       </div>
+ and the page created with <a href="https://github.com/tlienart/PkgPage.jl">PkgPage.jl</a>       </div>
+    </div>
+  </div>
+</section>
+<section id="summary" class="scrollspy">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 mx-auto">
+        <h2>Summary</h2><a id="summ" class="anchor"></a></p>
+<p>      </div>
+    </div>
+  </div>
+</section>
+<section id="links_for_downloading_the_estimates" class="scrollspy section-bg-color">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 mx-auto">
+        <h2>Links for Downloading the Estimates</h2><a id="sec0" class="anchor"></a></p>
+<p>      </div>
     </div>
   </div>
 </section>
 <section id="steps_to_be_taken" class="scrollspy">
   <div class="container">
     <div class="row">
-      <div class="col-lg-10 mx-auto">
+      <div class="col-lg-12 mx-auto">
         <h2>Steps to be Taken</h2><a id="sec1" class="anchor"></a></p>
 <pre><code class="language-julia-repl">julia&gt; using Statistics
 julia&gt; using DataFrames
@@ -108,7 +127,7 @@ julia&gt; using CSV</code></pre>
 <section id="eurostat" class="scrollspy section-bg-color">
   <div class="container">
     <div class="row">
-      <div class="col-lg-10 mx-auto">
+      <div class="col-lg-12 mx-auto">
         <h2>Eurostat</h2><a id="sec2" class="anchor"></a></p>
 <p>      </div>
     </div>
@@ -117,7 +136,7 @@ julia&gt; using CSV</code></pre>
 <section id="showing_code" class="scrollspy">
   <div class="container">
     <div class="row">
-      <div class="col-lg-10 mx-auto">
+      <div class="col-lg-12 mx-auto">
         <h2>Showing Code</h2></p>
 <pre><code class="language-julia">ctry&#61;Dict&#40;&#91;
 &#40;&quot;Austria&quot;, &quot;AT&quot;&#41;, &#40;&quot;Bulgaria&quot;, &quot;BG&quot;&#41;, &#40;&quot;Croatia&quot;, &quot;HR&quot;&#41;, &#40;&quot;Czech&quot;, &quot;CZ&quot;&#41;, &#40;&quot;Finland&quot;, &quot;FI&quot;&#41;,
@@ -384,7 +403,7 @@ replace&#33;&#40;df42.rsh42, NaN&#61;&gt;0&#41;
 <section id="to_github" class="scrollspy section-bg-color">
   <div class="container">
     <div class="row">
-      <div class="col-lg-10 mx-auto">
+      <div class="col-lg-12 mx-auto">
         <h2>To GitHub</h2><a id="sec3" class="anchor"></a>       </div>
     </div>
   </div>
