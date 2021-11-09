@@ -19,7 +19,7 @@ The latter allows you to plug in values that you would have defined here.
              deployed page to be in a subfolder e.g.: `YourPackage.jl/web/`.
 -->
 @def title       = "Estimates of Revenue Shares"
-@def prepath     = "Estimates"
+@def prepath     = "nace4europe"
 @def description = """
                    It combines information of Eurostat and Orbis to produce
                    estimates of revenue shares at 4- and 2-digits level.
