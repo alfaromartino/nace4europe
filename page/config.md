@@ -95,7 +95,7 @@ NOTE:
                     you can also set it for individual sections by specifying
                     the width argument: `\begin{:section, ..., width=10}`.
 -->
-@def section_width = 12
+@def section_width = 10
 
 <!-- COLOR PALETTE
 You can use Hex, RGB or SVG color names; these tools are useful to choose:
