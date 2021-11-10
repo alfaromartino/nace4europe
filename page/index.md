@@ -4,15 +4,13 @@
 \begin{section}{title="Contents", name="content"}
 (1) [Relevance of the Estimates](#summ) \\
 (2) [Links for Downloading the Estimates](#sec0) \\
-(3) [Roadmap of Code](#sec1) \\
-&ensp; &ensp; (3a) [Eurostat -- Cleaning](#sec2) \\  
-&ensp; &ensp; (3b) [To GitHub](#sec3) \\ 
-&ensp; &ensp; (3c) [To GitHub](#sec3) \\ 
+(3) [General Description of the Code](#sec1) \\
+&ensp; &ensp; (3a) [Step 1: Eurostat -- Cleaning](#sec2) \\  
+&ensp; &ensp; (3b) [Step 2: Eurostat -- Iteration](#sec3) \\ 
+&ensp; &ensp; (3c) [Step 3: ORBIS -- Cleaning](#sec3) \\ 
+&ensp; &ensp; (3d) [Step 4: ORBIS -- Iteration](#sec3) \\
 
-The **countries** covered are Austria, Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy, 
-Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine.  \\
-
-The code has been written in \figure{path="/assets/logo_julia.png", width="10%", style="border-radius:5px;"}
+The code has been written in \figure{path="/assets/logo_julia.png", width="10%", style="border-radius:2px;"}
 and this page created with [PkgPage.jl](https://github.com/tlienart/PkgPage.jl)
 \end{section}
 
@@ -24,13 +22,15 @@ Eurostat provides official statistics for revenue of industries in the **manufac
 
 However, there's an **issue**: not all values are reported due to confidentiality matters. This is even more pervasive for the total production reported by Prodcom classification (dataset `DS-066342`), which is dissagregated at the 8-digit level. \\
 
-Attending to this, the page provides estimates of revenue for 20 European countries. They are reported for some baseline year (i.e., 2018) and at the NACE (rev. 2) 4-digit level. The completion is based on an iterative procedure that recovers revenue shares within manufacturing, through the following steps:
+Attending to this, the page provides estimates of revenue for 19 European countries. They are reported for some baseline year (i.e., 2018) and at the NACE (rev. 2) 4-digit level. The completion is based on an iterative procedure that recovers revenue shares within manufacturing, through the following steps:
 1. Based on the revenues by Eurostat in Euros, define
-	&ensp; &ensp; &ensp; (a) revenue shares at the 2-digit level relative to manufacturing,\\
+	&ensp; &ensp; &ensp; (a) revenue shares at the 2-digit level relative to manufacturing, and \\
 	&ensp; &ensp; &ensp; (b) revenue shares at the 4-digit level relative to the industry's 2-digit level.
 2. Given remaining missing shares in (a) and (b), define relative shares based on previous years. To improve accuracy, the completion of relative shares are performed at the 4- and 2-digit level separately.
-1. If there are still missing shares, we use the revenue from the [ORBIS dataset](https://www.bvdinfo.com/en-gb/our-products/data/international/orbis). This exploits that ORBIS reports each firm's revenue at the NACE 4-digit level, allowing us to compute any remaining relative share at the 4- and 2-digit levels.\\
+1. If there are still missing shares, we use information from the [ORBIS dataset](https://www.bvdinfo.com/en-gb/our-products/data/international/orbis). This exploits that ORBIS reports each firm's revenue at the NACE 4-digit level, allowing us to compute any remaining relative share at the 4- and 2-digit levels.\\
 
+The **countries** covered are Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy, 
+Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine. 
 
 
 \end{section}
@@ -40,15 +40,14 @@ Attending to this, the page provides estimates of revenue for 20 European countr
      ESTIMATES
      ============================== -->
 \begin{section}{title="Links for Downloading the Estimates"}\label{sec0}
+The files are in CSV format.
 
 
 \end{section}
 <!-- ==============================
-     GETTING STARTED
+     ROADMAP
      ============================== -->
-\begin{section}{title="Steps to be Taken"}\label{sec1}
-
-
+\begin{section}{title="General Description of the Code"}\label{sec1}
 
 
 
@@ -57,7 +56,6 @@ julia> using Statistics
 julia> using DataFrames
 julia> using CSV
 ```
-\\
 
 \end{section}
 
@@ -78,8 +76,7 @@ julia> using CSV
 
 
 ```julia
-ctry=Dict([
-("Austria", "AT"), ("Bulgaria", "BG"), ("Croatia", "HR"), ("Czech", "CZ"), ("Finland", "FI"),
+ctry=Dict([("Bulgaria", "BG"), ("Croatia", "HR"), ("Czech", "CZ"), ("Finland", "FI"),
 ("France", "FR"), ("Germany", "DE"), ("Great Britain", "UK") ,("Hungary", "HU"),("Italy", "IT"), ("Norway", "NO"),
 ("Poland", "PL"), ("Portugal", "PT"), ("Romania", "RO"), ("Serbia", "RS"), ("Slovakia", "SK"), ("Slovenia", "SI"),
 ("Spain", "ES"), ("Sweden", "SE"), ("Ukraine", "UA")])
@@ -88,7 +85,7 @@ ctry=Dict(lowercase.([keys(ctry)...]).=> [values(ctry)...])
 dn=DataFrame(nctry=[keys(ctry)...],cctry=[values(ctry)...])
 dn.ind=LinearIndices(1:length(dn.cctry)) #numerical index of the country
 
-yr=2018; #baseline year
+yr=2018; ##year for the estimates
 
 ```
 
@@ -197,56 +194,56 @@ dg1=dff4[(dff4.mis2.!=0),:] # SOME PROBLEM, WE'LL PARTITION THIS IN TURN
 
 
 #we try to recover first some of the nace42 (not using nace43)
-	function solveprob1(yr,dg1)
-		dg2=copy(unique(dg1[:,[:ctry,:nace4,:rsh42,:mis2]])) #they have some type  of missing value
-		dga=copy(unique(dg1[dg1.mis.!=0,[:ctry,:nace4,:remsh2,:rsh42,:mis2]])) #they have some type  of missing value
-		dga=rename!(dga,:mis2=>:mid2)
+function solveprob1(yr,dg1)
+	dg2=copy(unique(dg1[:,[:ctry,:nace4,:rsh42,:mis2]])) #they have some type  of missing value
+	dga=copy(unique(dg1[dg1.mis.!=0,[:ctry,:nace4,:remsh2,:rsh42,:mis2]])) #they have some type  of missing value
+	dga=rename!(dga,:mis2=>:mid2)
 
-		a1=missi(euroclean(yr)) ; a1=dropmissing(a1)
-		a1=leftjoin(dga,a1,on=[:ctry,:nace4]) ; a1=a1[:,Not([:year,:nace3,:erev33])] ; [a1.nace2[i]=SubString(a1.nace4[i],1:2) for i in eachindex(a1.nace4)]
-		a1[:,:rr2].=a1.erev ./ a1.erev22
+	a1=missi(euroclean(yr)) ; a1=dropmissing(a1)
+	a1=leftjoin(dga,a1,on=[:ctry,:nace4]) ; a1=a1[:,Not([:year,:nace3,:erev33])] ; [a1.nace2[i]=SubString(a1.nace4[i],1:2) for i in eachindex(a1.nace4)]
+	a1[:,:rr2].=a1.erev ./ a1.erev22
 
 
-		if isempty(a1)==1
-			display("empty set")
+	if isempty(a1)==1
+		display("empty set")
+	else
+	a1[:,:chek].=ismissing.(a1.rr2)
+	a1=transform(DataFrames.groupby(a1,[:ctry,:nace2]),:chek => (x -> sum(skipmissing(x))) => :todrope,nrow => :todropo)
+	a1=a1[(a1.todrope.!=a1.todropo),:]
+	if size(a1)[1].==0
+		display("no additional values") ;		return dg1
 		else
-		a1[:,:chek].=ismissing.(a1.rr2)
-		a1=transform(DataFrames.groupby(a1,[:ctry,:nace2]),:chek => (x -> sum(skipmissing(x))) => :todrope,nrow => :todropo)
-		a1=a1[(a1.todrope.!=a1.todropo),:]
-		if size(a1)[1].==0
-			display("no additional values") ;		return dg1
-			else
 
-			a1=a1[:,Not([:chek,:todrope,:todropo])]
+		a1=a1[:,Not([:chek,:todrope,:todropo])]
 
-			a1=transform(DataFrames.groupby(a1,[:ctry,:nace2]),
-			:rr2 => (x -> sum(skipmissing(x))) => :Tnewsh2,
-			:rr2 => (x -> sum((ismissing.(x).==0)) ) =>:nmis2)
+		a1=transform(DataFrames.groupby(a1,[:ctry,:nace2]),
+		:rr2 => (x -> sum(skipmissing(x))) => :Tnewsh2,
+		:rr2 => (x -> sum((ismissing.(x).==0)) ) =>:nmis2)
 
-			[( (a1.nmis2[i]==a1.mid2[i]) && (a1.rr2[i]=a1.rr2[i]/a1.Tnewsh2[i] *a1.remsh2[i]) ) for i in eachindex(a1.erev)]
+		[( (a1.nmis2[i]==a1.mid2[i]) && (a1.rr2[i]=a1.rr2[i]/a1.Tnewsh2[i] *a1.remsh2[i]) ) for i in eachindex(a1.erev)]
 
-			[( ( (a1.nmis2[i]==a1.mid2[i]-1) & (a1.Tnewsh2[i]<a1.remsh2[i]) )
-			&& (a1.rr2[i]=a1.rr2[i]) ) for i in eachindex(a1.erev) if (ismissing(a1.rr2[i]==0))]
+		[( ( (a1.nmis2[i]==a1.mid2[i]-1) & (a1.Tnewsh2[i]<a1.remsh2[i]) )
+		&& (a1.rr2[i]=a1.rr2[i]) ) for i in eachindex(a1.erev) if (ismissing(a1.rr2[i]==0))]
 
-			[( ( (a1.nmis2[i]==a1.mid2[i]-1) & (a1.Tnewsh2[i]<a1.remsh2[i]) )
-			&& (a1.rr2[i]=a1.remsh2[i]-a1.Tnewsh2[i])  ) for i in eachindex(a1.erev) if (ismissing(a1.rr2[i]==1))]
+		[( ( (a1.nmis2[i]==a1.mid2[i]-1) & (a1.Tnewsh2[i]<a1.remsh2[i]) )
+		&& (a1.rr2[i]=a1.remsh2[i]-a1.Tnewsh2[i])  ) for i in eachindex(a1.erev) if (ismissing(a1.rr2[i]==1))]
 
 
-			#we merge the data
-			a1=a1[:,[:ctry,:nace4,:rr2]]
-			dg2=leftjoin(dg2,a1,on=[:ctry,:nace4])
-			dg2[:,:nace2].=""
-			[dg2.nace2[i]=SubString(dg2.nace4[i],1:2) for i in eachindex(dg2.nace4)]
-			dg2[:,:nace3].=""
-			[dg2.nace3[i]=SubString(dg2.nace4[i],1:3) for i in eachindex(dg2.nace4)]
+		#we merge the data
+		a1=a1[:,[:ctry,:nace4,:rr2]]
+		dg2=leftjoin(dg2,a1,on=[:ctry,:nace4])
+		dg2[:,:nace2].=""
+		[dg2.nace2[i]=SubString(dg2.nace4[i],1:2) for i in eachindex(dg2.nace4)]
+		dg2[:,:nace3].=""
+		[dg2.nace3[i]=SubString(dg2.nace4[i],1:3) for i in eachindex(dg2.nace4)]
 
-			[( ((dg2.rsh42[i]==-1) & (ismissing(dg2.rr2[i])==0)) && (dg2.rsh42[i]=dg2.rr2[i])) for i in eachindex(dg2.rr2)]
+		[( ((dg2.rsh42[i]==-1) & (ismissing(dg2.rr2[i])==0)) && (dg2.rsh42[i]=dg2.rr2[i])) for i in eachindex(dg2.rr2)]
 
-			dg2=missi2(dg2,"rsh42",-1) ; dg2=dg2[:,Not(:rr2)]
-			end
-			end
-			return dg2
+		dg2=missi2(dg2,"rsh42",-1) ; dg2=dg2[:,Not(:rr2)]
+		end
 	end
+	return dg2
+end
 
 
 dg1=solveprob1(2017,dg1) ; display(sum(dg1.mis))
@@ -273,34 +270,34 @@ dg1u=dg1[(dg1.mis2.!=0),:] ; dg1s=dg1[(dg1.mis2.==0),:]
 ############################################################################################################
 
 
-		function cleanrev(dg,dn,var) #this is for data from 2018, dn is the name of the country, var is the name of the variable (wage, rev, etc)
-		  df=DataFrame(nace=dg[:,3],id=dg[:,4],xx1=dg[:,6],xx2=dg[:,5],xx3=dg[:,7],ctry=dn) #we use 2018
+function cleanrev(dg,dn,var) #this is for data from 2018, dn is the name of the country, var is the name of the variable (wage, rev, etc)
+	df=DataFrame(nace=dg[:,3],id=dg[:,4],xx1=dg[:,6],xx2=dg[:,5],xx3=dg[:,7],ctry=dn) #we use 2018
 
-		  	df[:,:nace4].=string.(df.nace)
+	df[:,:nace4].=string.(df.nace)
 
-			mapcols(col -> replace!(col, "n.a."=> "-1"), df)
-			mapcols(col -> replace!(col, ""=> "-1"), df)
-			df.xx1=coalesce.(df.xx1, "-1") ; 			df.xx2=coalesce.(df.xx2, "-1") ; 			df.xx3=coalesce.(df.xx2, "-1")
-			df.xx1=tryparse.(Float64,string.(df.xx1)); 	df.xx2=tryparse.(Float64,string.(df.xx2)) ;  df.xx3=tryparse.(Float64,string.(df.xx3))
+	mapcols(col -> replace!(col, "n.a."=> "-1"), df)
+	mapcols(col -> replace!(col, ""=> "-1"), df)
+	df.xx1=coalesce.(df.xx1, "-1") ; 			df.xx2=coalesce.(df.xx2, "-1") ; 			df.xx3=coalesce.(df.xx2, "-1")
+	df.xx1=tryparse.(Float64,string.(df.xx1)); 	df.xx2=tryparse.(Float64,string.(df.xx2)) ;  df.xx3=tryparse.(Float64,string.(df.xx3))
 
-			###we now create different DFs to identify at least one value of xxenues
-			df=df[(df.xx1 .>0) .| (df.xx2 .>0 .| (df.xx3 .>0)), :]
-			df[:,:xx].=df.xx1
-			[(if df.xx1[i]<=0 df.xx[i]=df.xx2[i] end) for i in eachindex(df.xx)]
-			[(if df.xx[i]<=0 df.xx[i]=df.xx3[i] end) for i in eachindex(df.xx)]
-			[(if df.xx[i]<=0 df.xx[i]=-1 end) for i in eachindex(df.xx)]
-			df=unique(df[:,[:ctry,:id,:nace4,:xx]])
+	###we now create different DFs to identify at least one value of xxenues
+	df=df[(df.xx1 .>0) .| (df.xx2 .>0 .| (df.xx3 .>0)), :]
+	df[:,:xx].=df.xx1
+	[(if df.xx1[i]<=0 df.xx[i]=df.xx2[i] end) for i in eachindex(df.xx)]
+	[(if df.xx[i]<=0 df.xx[i]=df.xx3[i] end) for i in eachindex(df.xx)]
+	[(if df.xx[i]<=0 df.xx[i]=-1 end) for i in eachindex(df.xx)]
+	df=unique(df[:,[:ctry,:id,:nace4,:xx]])
 
-			df[:,:nace2].="" ; df[:,:nace3].=""
-			[df.nace2[i]=SubString(df.nace4[i],1:2) for i in eachindex(df.nace4)]
-			[df.nace3[i]=SubString(df.nace4[i],1:3) for i in eachindex(df.nace4)]
-			df=df[df.xx.>0,:]
+	df[:,:nace2].="" ; df[:,:nace3].=""
+	[df.nace2[i]=SubString(df.nace4[i],1:2) for i in eachindex(df.nace4)]
+	[df.nace3[i]=SubString(df.nace4[i],1:3) for i in eachindex(df.nace4)]
+	df=df[df.xx.>0,:]
 
-			df=unique(df)
-			df=rename(df, :xx => Symbol("$var"))
+	df=unique(df)
+	df=rename(df, :xx => Symbol("$var"))
 
-			return df
-		  end
+	return df
+end
 
 dfs=[DataFrame(CSV.File("$(homedir())\\Desktop\\ORBIS\\allcountries\\$(value)_2019_rev_manuf.csv"))  for (key,value) in enumerate(dn.nctry)] # to create a vector with dfs
 [dfs[i]=cleanrev(dfs[i],dn[i,:cctry],Symbol("orev")) for i in eachindex(dn.ind)]
