@@ -27,13 +27,14 @@ Attending to this, the page provides estimates of revenue for 19 European countr
 The **countries** covered are Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy, 
 Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine. 
 
-The countries chosen have a high coverage in ORBIS relative to Eurostat (except for Germany, which I included given its importance). The following tables show the percentage of revenue covered in each country. 
+The countries chosen have a high coverage in ORBIS relative to Eurostat (except for Germany, which I included given its importance). The following tables show the percentage of revenue covered by ORBIS in each country. \\ \\
 
-```julia:rev
-#hideall
-include("$(homedir())\\Desktop\\ORBIS\\eurostat\\turnover_calc\\newcode02\\page\\_assets\\scripts\\compare_rev03.jl");
+\begin{center}
+\figure{path="/assets/scripts/ind_rev_orbis_west.svg", width="150%", style="border-radius:2px;"}
+\figure{path="/assets/scripts/ind_rev_orbis_east.svg", width="150%", style="border-radius:2px;"}
+\end{center}
 
-```
+
 
 \end{section}
 
