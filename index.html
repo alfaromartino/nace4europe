@@ -68,7 +68,7 @@ pre code.hljs.plaintext {
     <div class="jumbotron jumbotron-fluid container-fluid bg-primary">
   
     <h1>Revenue Shares for European Countries</h1>
-    <div class="lead">Estimates of revenue shares at the 4- and 2-digit levels (NACE rev. 2) by combining information from Eurostat and Orbis
+    <div class="lead">Estimates of revenue shares at the 4- and 2-digit levels (NACE rev. 2) by combining information from Eurostat and ORBIS
 </div>
     
       <a class="name_format" href="https://sites.google.com/view/alfaromartino/" target="_blank" rel="noopener noreferrer" data-size="large" aria-label="View on GitHub">Martin Alfaro</a>
@@ -82,10 +82,9 @@ pre code.hljs.plaintext {
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
-        <h2>Contents</h2> &#40;1&#41; <a href="#summ">Relevance of the Estimates</a> <br/> &#40;2&#41; <a href="#sec0">Links for Downloading the Estimates</a> <br/> &#40;3&#41; <a href="#sec1">Roadmap of Code</a> <br/> &ensp; &ensp; &#40;3a&#41; <a href="#sec2">Eurostat – Cleaning</a> <br/> &ensp; &ensp; &#40;3b&#41; <a href="#sec3">To GitHub</a> <br/> &ensp; &ensp; &#40;3c&#41; <a href="#sec3">To GitHub</a> <br/> </p>
-<p>The <strong>countries</strong> covered are Austria, Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy,  Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine. <br/></p>
+        <h2>Contents</h2> &#40;1&#41; <a href="#summ">Relevance of the Estimates</a> <br/> &#40;2&#41; <a href="#sec0">Links for Downloading the Estimates</a> <br/> &#40;3&#41; <a href="#sec1">General Description of the Code</a> <br/> &ensp; &ensp; &#40;3a&#41; <a href="#sec2">Step 1: Eurostat – Cleaning</a> <br/> &ensp; &ensp; &#40;3b&#41; <a href="#sec3">Step 2: Eurostat – Iteration</a> <br/> &ensp; &ensp; &#40;3c&#41; <a href="#sec3">Step 3: ORBIS – Cleaning</a> <br/> &ensp; &ensp; &#40;3d&#41; <a href="#sec3">Step 4: ORBIS – Iteration</a> <br/></p>
 <p>The code has been written in <figure class="figure">
-  <img src="/nace4europe/assets/logo_julia.png" alt="" class="figure-img img-fluid " width="10%" style="border-radius:5px;">
+  <img src="/nace4europe/assets/logo_julia.png" alt="" class="figure-img img-fluid " width="10%" style="border-radius:2px;">
   
 </figure>
  and this page created with <a href="https://github.com/tlienart/PkgPage.jl">PkgPage.jl</a>       </div>
@@ -98,18 +97,19 @@ pre code.hljs.plaintext {
       <div class="col-lg-11 mx-auto">
         <h2>Relevance of the Estimates</h2><a id="summ" class="anchor"></a> Eurostat provides official statistics for revenue of industries in the <strong>manufacturing sector</strong> &#40;sector C, with codes from 1000 to 3399, as defined by the NACE rev 2 classification&#41;. They are presented in the dataset <code>sbs_na_ind_r2</code>. <br/></p>
 <p>However, there&#39;s an <strong>issue</strong>: not all values are reported due to confidentiality matters. This is even more pervasive for the total production reported by Prodcom classification &#40;dataset <code>DS-066342</code>&#41;, which is dissagregated at the 8-digit level. <br/></p>
-<p>Attending to this, the page provides estimates of revenue for 20 European countries. They are reported for some baseline year &#40;i.e., 2018&#41; and at the NACE &#40;rev. 2&#41; 4-digit level. The completion is based on an iterative procedure that recovers revenue shares within manufacturing, through the following steps:</p>
+<p>Attending to this, the page provides estimates of revenue for 19 European countries. They are reported for some baseline year &#40;i.e., 2018&#41; and at the NACE &#40;rev. 2&#41; 4-digit level. The completion is based on an iterative procedure that recovers revenue shares within manufacturing, through the following steps:</p>
 <ol>
 <li><p>Based on the revenues by Eurostat in Euros, define</p>
 </li>
 </ol>
-<p>&ensp; &ensp; &ensp; &#40;a&#41; revenue shares at the 2-digit level relative to manufacturing,<br/> &ensp; &ensp; &ensp; &#40;b&#41; revenue shares at the 4-digit level relative to the industry&#39;s 2-digit level.</p>
+<p>&ensp; &ensp; &ensp; &#40;a&#41; revenue shares at the 2-digit level relative to manufacturing, and <br/> &ensp; &ensp; &ensp; &#40;b&#41; revenue shares at the 4-digit level relative to the industry&#39;s 2-digit level.</p>
 <ol start="2">
 <li><p>Given remaining missing shares in &#40;a&#41; and &#40;b&#41;, define relative shares based on previous years. To improve accuracy, the completion of relative shares are performed at the 4- and 2-digit level separately.</p>
 </li>
-<li><p>If there are still missing shares, we use the revenue from the <a href="https://www.bvdinfo.com/en-gb/our-products/data/international/orbis">ORBIS dataset</a>. This exploits that ORBIS reports each firm&#39;s revenue at the NACE 4-digit level, allowing us to compute any remaining relative share at the 4- and 2-digit levels.<br/></p>
+<li><p>If there are still missing shares, we use information from the <a href="https://www.bvdinfo.com/en-gb/our-products/data/international/orbis">ORBIS dataset</a>. This exploits that ORBIS reports each firm&#39;s revenue at the NACE 4-digit level, allowing us to compute any remaining relative share at the 4- and 2-digit levels.<br/></p>
 </li>
 </ol>
+<p>The <strong>countries</strong> covered are Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy,  Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine. </p>
 <p>      </div>
     </div>
   </div>
@@ -118,20 +118,19 @@ pre code.hljs.plaintext {
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
-        <h2>Links for Downloading the Estimates</h2><a id="sec0" class="anchor"></a></p>
+        <h2>Links for Downloading the Estimates</h2><a id="sec0" class="anchor"></a> The files are in CSV format.</p>
 <p>      </div>
     </div>
   </div>
 </section>
-<section id="steps_to_be_taken" class="scrollspy">
+<section id="general_description_of_the_code" class="scrollspy">
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
-        <h2>Steps to be Taken</h2><a id="sec1" class="anchor"></a></p>
+        <h2>General Description of the Code</h2><a id="sec1" class="anchor"></a></p>
 <pre><code class="language-julia-repl">julia&gt; using Statistics
 julia&gt; using DataFrames
 julia&gt; using CSV</code></pre>
-<br/>
 <p>      </div>
     </div>
   </div>
@@ -150,8 +149,7 @@ julia&gt; using CSV</code></pre>
     <div class="row">
       <div class="col-lg-11 mx-auto">
         <h2>Showing Code</h2></p>
-<pre><code class="language-julia">ctry&#61;Dict&#40;&#91;
-&#40;&quot;Austria&quot;, &quot;AT&quot;&#41;, &#40;&quot;Bulgaria&quot;, &quot;BG&quot;&#41;, &#40;&quot;Croatia&quot;, &quot;HR&quot;&#41;, &#40;&quot;Czech&quot;, &quot;CZ&quot;&#41;, &#40;&quot;Finland&quot;, &quot;FI&quot;&#41;,
+<pre><code class="language-julia">ctry&#61;Dict&#40;&#91;&#40;&quot;Bulgaria&quot;, &quot;BG&quot;&#41;, &#40;&quot;Croatia&quot;, &quot;HR&quot;&#41;, &#40;&quot;Czech&quot;, &quot;CZ&quot;&#41;, &#40;&quot;Finland&quot;, &quot;FI&quot;&#41;,
 &#40;&quot;France&quot;, &quot;FR&quot;&#41;, &#40;&quot;Germany&quot;, &quot;DE&quot;&#41;, &#40;&quot;Great Britain&quot;, &quot;UK&quot;&#41; ,&#40;&quot;Hungary&quot;, &quot;HU&quot;&#41;,&#40;&quot;Italy&quot;, &quot;IT&quot;&#41;, &#40;&quot;Norway&quot;, &quot;NO&quot;&#41;,
 &#40;&quot;Poland&quot;, &quot;PL&quot;&#41;, &#40;&quot;Portugal&quot;, &quot;PT&quot;&#41;, &#40;&quot;Romania&quot;, &quot;RO&quot;&#41;, &#40;&quot;Serbia&quot;, &quot;RS&quot;&#41;, &#40;&quot;Slovakia&quot;, &quot;SK&quot;&#41;, &#40;&quot;Slovenia&quot;, &quot;SI&quot;&#41;,
 &#40;&quot;Spain&quot;, &quot;ES&quot;&#41;, &#40;&quot;Sweden&quot;, &quot;SE&quot;&#41;, &#40;&quot;Ukraine&quot;, &quot;UA&quot;&#41;&#93;&#41;
@@ -160,7 +158,7 @@ ctry&#61;Dict&#40;lowercase.&#40;&#91;keys&#40;ctry&#41;...&#93;&#41;.&#61;&gt; 
 dn&#61;DataFrame&#40;nctry&#61;&#91;keys&#40;ctry&#41;...&#93;,cctry&#61;&#91;values&#40;ctry&#41;...&#93;&#41;
 dn.ind&#61;LinearIndices&#40;1:length&#40;dn.cctry&#41;&#41; #numerical index of the country
 
-yr&#61;2018; #baseline year</code></pre>
+yr&#61;2018; ##year for the estimates</code></pre>
 <pre><code class="language-julia">function euroclean&#40;yr&#41;
 	#sbs&#61;DataFrame&#40;CSV.File&#40;&quot;sbs_na_ind_r2_1_Data.csv&quot;; select&#61;&#91;:TIME,:GEO,:INDIC_SB,:NACE_R2,:Value&#93;&#41;&#41;
     sbs&#61;DataFrame&#40;CSV.File&#40;&quot;&#36;&#40;homedir&#40;&#41;&#41;\\Desktop\\ORBIS\\eurostat\\turnover_calc\\sbs_na_ind_r2_1_Data.csv&quot;; select&#61;&#91;:TIME,:GEO,:INDIC_SB,:NACE_R2,:Value&#93;&#41;&#41;
@@ -261,56 +259,56 @@ dg1&#61;dff4&#91;&#40;dff4.mis2.&#33;&#61;0&#41;,:&#93; # SOME PROBLEM, WE&#39;L
 
 
 #we try to recover first some of the nace42 &#40;not using nace43&#41;
-	function solveprob1&#40;yr,dg1&#41;
-		dg2&#61;copy&#40;unique&#40;dg1&#91;:,&#91;:ctry,:nace4,:rsh42,:mis2&#93;&#93;&#41;&#41; #they have some type  of missing value
-		dga&#61;copy&#40;unique&#40;dg1&#91;dg1.mis.&#33;&#61;0,&#91;:ctry,:nace4,:remsh2,:rsh42,:mis2&#93;&#93;&#41;&#41; #they have some type  of missing value
-		dga&#61;rename&#33;&#40;dga,:mis2&#61;&gt;:mid2&#41;
+function solveprob1&#40;yr,dg1&#41;
+	dg2&#61;copy&#40;unique&#40;dg1&#91;:,&#91;:ctry,:nace4,:rsh42,:mis2&#93;&#93;&#41;&#41; #they have some type  of missing value
+	dga&#61;copy&#40;unique&#40;dg1&#91;dg1.mis.&#33;&#61;0,&#91;:ctry,:nace4,:remsh2,:rsh42,:mis2&#93;&#93;&#41;&#41; #they have some type  of missing value
+	dga&#61;rename&#33;&#40;dga,:mis2&#61;&gt;:mid2&#41;
 
-		a1&#61;missi&#40;euroclean&#40;yr&#41;&#41; ; a1&#61;dropmissing&#40;a1&#41;
-		a1&#61;leftjoin&#40;dga,a1,on&#61;&#91;:ctry,:nace4&#93;&#41; ; a1&#61;a1&#91;:,Not&#40;&#91;:year,:nace3,:erev33&#93;&#41;&#93; ; &#91;a1.nace2&#91;i&#93;&#61;SubString&#40;a1.nace4&#91;i&#93;,1:2&#41; for i in eachindex&#40;a1.nace4&#41;&#93;
-		a1&#91;:,:rr2&#93;.&#61;a1.erev ./ a1.erev22
+	a1&#61;missi&#40;euroclean&#40;yr&#41;&#41; ; a1&#61;dropmissing&#40;a1&#41;
+	a1&#61;leftjoin&#40;dga,a1,on&#61;&#91;:ctry,:nace4&#93;&#41; ; a1&#61;a1&#91;:,Not&#40;&#91;:year,:nace3,:erev33&#93;&#41;&#93; ; &#91;a1.nace2&#91;i&#93;&#61;SubString&#40;a1.nace4&#91;i&#93;,1:2&#41; for i in eachindex&#40;a1.nace4&#41;&#93;
+	a1&#91;:,:rr2&#93;.&#61;a1.erev ./ a1.erev22
 
 
-		if isempty&#40;a1&#41;&#61;&#61;1
-			display&#40;&quot;empty set&quot;&#41;
+	if isempty&#40;a1&#41;&#61;&#61;1
+		display&#40;&quot;empty set&quot;&#41;
+	else
+	a1&#91;:,:chek&#93;.&#61;ismissing.&#40;a1.rr2&#41;
+	a1&#61;transform&#40;DataFrames.groupby&#40;a1,&#91;:ctry,:nace2&#93;&#41;,:chek &#61;&gt; &#40;x -&gt; sum&#40;skipmissing&#40;x&#41;&#41;&#41; &#61;&gt; :todrope,nrow &#61;&gt; :todropo&#41;
+	a1&#61;a1&#91;&#40;a1.todrope.&#33;&#61;a1.todropo&#41;,:&#93;
+	if size&#40;a1&#41;&#91;1&#93;.&#61;&#61;0
+		display&#40;&quot;no additional values&quot;&#41; ;		return dg1
 		else
-		a1&#91;:,:chek&#93;.&#61;ismissing.&#40;a1.rr2&#41;
-		a1&#61;transform&#40;DataFrames.groupby&#40;a1,&#91;:ctry,:nace2&#93;&#41;,:chek &#61;&gt; &#40;x -&gt; sum&#40;skipmissing&#40;x&#41;&#41;&#41; &#61;&gt; :todrope,nrow &#61;&gt; :todropo&#41;
-		a1&#61;a1&#91;&#40;a1.todrope.&#33;&#61;a1.todropo&#41;,:&#93;
-		if size&#40;a1&#41;&#91;1&#93;.&#61;&#61;0
-			display&#40;&quot;no additional values&quot;&#41; ;		return dg1
-			else
 
-			a1&#61;a1&#91;:,Not&#40;&#91;:chek,:todrope,:todropo&#93;&#41;&#93;
+		a1&#61;a1&#91;:,Not&#40;&#91;:chek,:todrope,:todropo&#93;&#41;&#93;
 
-			a1&#61;transform&#40;DataFrames.groupby&#40;a1,&#91;:ctry,:nace2&#93;&#41;,
-			:rr2 &#61;&gt; &#40;x -&gt; sum&#40;skipmissing&#40;x&#41;&#41;&#41; &#61;&gt; :Tnewsh2,
-			:rr2 &#61;&gt; &#40;x -&gt; sum&#40;&#40;ismissing.&#40;x&#41;.&#61;&#61;0&#41;&#41; &#41; &#61;&gt;:nmis2&#41;
+		a1&#61;transform&#40;DataFrames.groupby&#40;a1,&#91;:ctry,:nace2&#93;&#41;,
+		:rr2 &#61;&gt; &#40;x -&gt; sum&#40;skipmissing&#40;x&#41;&#41;&#41; &#61;&gt; :Tnewsh2,
+		:rr2 &#61;&gt; &#40;x -&gt; sum&#40;&#40;ismissing.&#40;x&#41;.&#61;&#61;0&#41;&#41; &#41; &#61;&gt;:nmis2&#41;
 
-			&#91;&#40; &#40;a1.nmis2&#91;i&#93;&#61;&#61;a1.mid2&#91;i&#93;&#41; &amp;&amp; &#40;a1.rr2&#91;i&#93;&#61;a1.rr2&#91;i&#93;/a1.Tnewsh2&#91;i&#93; *a1.remsh2&#91;i&#93;&#41; &#41; for i in eachindex&#40;a1.erev&#41;&#93;
+		&#91;&#40; &#40;a1.nmis2&#91;i&#93;&#61;&#61;a1.mid2&#91;i&#93;&#41; &amp;&amp; &#40;a1.rr2&#91;i&#93;&#61;a1.rr2&#91;i&#93;/a1.Tnewsh2&#91;i&#93; *a1.remsh2&#91;i&#93;&#41; &#41; for i in eachindex&#40;a1.erev&#41;&#93;
 
-			&#91;&#40; &#40; &#40;a1.nmis2&#91;i&#93;&#61;&#61;a1.mid2&#91;i&#93;-1&#41; &amp; &#40;a1.Tnewsh2&#91;i&#93;&lt;a1.remsh2&#91;i&#93;&#41; &#41;
-			&amp;&amp; &#40;a1.rr2&#91;i&#93;&#61;a1.rr2&#91;i&#93;&#41; &#41; for i in eachindex&#40;a1.erev&#41; if &#40;ismissing&#40;a1.rr2&#91;i&#93;&#61;&#61;0&#41;&#41;&#93;
+		&#91;&#40; &#40; &#40;a1.nmis2&#91;i&#93;&#61;&#61;a1.mid2&#91;i&#93;-1&#41; &amp; &#40;a1.Tnewsh2&#91;i&#93;&lt;a1.remsh2&#91;i&#93;&#41; &#41;
+		&amp;&amp; &#40;a1.rr2&#91;i&#93;&#61;a1.rr2&#91;i&#93;&#41; &#41; for i in eachindex&#40;a1.erev&#41; if &#40;ismissing&#40;a1.rr2&#91;i&#93;&#61;&#61;0&#41;&#41;&#93;
 
-			&#91;&#40; &#40; &#40;a1.nmis2&#91;i&#93;&#61;&#61;a1.mid2&#91;i&#93;-1&#41; &amp; &#40;a1.Tnewsh2&#91;i&#93;&lt;a1.remsh2&#91;i&#93;&#41; &#41;
-			&amp;&amp; &#40;a1.rr2&#91;i&#93;&#61;a1.remsh2&#91;i&#93;-a1.Tnewsh2&#91;i&#93;&#41;  &#41; for i in eachindex&#40;a1.erev&#41; if &#40;ismissing&#40;a1.rr2&#91;i&#93;&#61;&#61;1&#41;&#41;&#93;
+		&#91;&#40; &#40; &#40;a1.nmis2&#91;i&#93;&#61;&#61;a1.mid2&#91;i&#93;-1&#41; &amp; &#40;a1.Tnewsh2&#91;i&#93;&lt;a1.remsh2&#91;i&#93;&#41; &#41;
+		&amp;&amp; &#40;a1.rr2&#91;i&#93;&#61;a1.remsh2&#91;i&#93;-a1.Tnewsh2&#91;i&#93;&#41;  &#41; for i in eachindex&#40;a1.erev&#41; if &#40;ismissing&#40;a1.rr2&#91;i&#93;&#61;&#61;1&#41;&#41;&#93;
 
 
-			#we merge the data
-			a1&#61;a1&#91;:,&#91;:ctry,:nace4,:rr2&#93;&#93;
-			dg2&#61;leftjoin&#40;dg2,a1,on&#61;&#91;:ctry,:nace4&#93;&#41;
-			dg2&#91;:,:nace2&#93;.&#61;&quot;&quot;
-			&#91;dg2.nace2&#91;i&#93;&#61;SubString&#40;dg2.nace4&#91;i&#93;,1:2&#41; for i in eachindex&#40;dg2.nace4&#41;&#93;
-			dg2&#91;:,:nace3&#93;.&#61;&quot;&quot;
-			&#91;dg2.nace3&#91;i&#93;&#61;SubString&#40;dg2.nace4&#91;i&#93;,1:3&#41; for i in eachindex&#40;dg2.nace4&#41;&#93;
+		#we merge the data
+		a1&#61;a1&#91;:,&#91;:ctry,:nace4,:rr2&#93;&#93;
+		dg2&#61;leftjoin&#40;dg2,a1,on&#61;&#91;:ctry,:nace4&#93;&#41;
+		dg2&#91;:,:nace2&#93;.&#61;&quot;&quot;
+		&#91;dg2.nace2&#91;i&#93;&#61;SubString&#40;dg2.nace4&#91;i&#93;,1:2&#41; for i in eachindex&#40;dg2.nace4&#41;&#93;
+		dg2&#91;:,:nace3&#93;.&#61;&quot;&quot;
+		&#91;dg2.nace3&#91;i&#93;&#61;SubString&#40;dg2.nace4&#91;i&#93;,1:3&#41; for i in eachindex&#40;dg2.nace4&#41;&#93;
 
-			&#91;&#40; &#40;&#40;dg2.rsh42&#91;i&#93;&#61;&#61;-1&#41; &amp; &#40;ismissing&#40;dg2.rr2&#91;i&#93;&#41;&#61;&#61;0&#41;&#41; &amp;&amp; &#40;dg2.rsh42&#91;i&#93;&#61;dg2.rr2&#91;i&#93;&#41;&#41; for i in eachindex&#40;dg2.rr2&#41;&#93;
+		&#91;&#40; &#40;&#40;dg2.rsh42&#91;i&#93;&#61;&#61;-1&#41; &amp; &#40;ismissing&#40;dg2.rr2&#91;i&#93;&#41;&#61;&#61;0&#41;&#41; &amp;&amp; &#40;dg2.rsh42&#91;i&#93;&#61;dg2.rr2&#91;i&#93;&#41;&#41; for i in eachindex&#40;dg2.rr2&#41;&#93;
 
-			dg2&#61;missi2&#40;dg2,&quot;rsh42&quot;,-1&#41; ; dg2&#61;dg2&#91;:,Not&#40;:rr2&#41;&#93;
-			end
-			end
-			return dg2
+		dg2&#61;missi2&#40;dg2,&quot;rsh42&quot;,-1&#41; ; dg2&#61;dg2&#91;:,Not&#40;:rr2&#41;&#93;
+		end
 	end
+	return dg2
+end
 
 
 dg1&#61;solveprob1&#40;2017,dg1&#41; ; display&#40;sum&#40;dg1.mis&#41;&#41;
@@ -337,34 +335,34 @@ dg1u&#61;dg1&#91;&#40;dg1.mis2.&#33;&#61;0&#41;,:&#93; ; dg1s&#61;dg1&#91;&#40;d
 ############################################################################################################
 
 
-		function cleanrev&#40;dg,dn,var&#41; #this is for data from 2018, dn is the name of the country, var is the name of the variable &#40;wage, rev, etc&#41;
-		  df&#61;DataFrame&#40;nace&#61;dg&#91;:,3&#93;,id&#61;dg&#91;:,4&#93;,xx1&#61;dg&#91;:,6&#93;,xx2&#61;dg&#91;:,5&#93;,xx3&#61;dg&#91;:,7&#93;,ctry&#61;dn&#41; #we use 2018
+function cleanrev&#40;dg,dn,var&#41; #this is for data from 2018, dn is the name of the country, var is the name of the variable &#40;wage, rev, etc&#41;
+	df&#61;DataFrame&#40;nace&#61;dg&#91;:,3&#93;,id&#61;dg&#91;:,4&#93;,xx1&#61;dg&#91;:,6&#93;,xx2&#61;dg&#91;:,5&#93;,xx3&#61;dg&#91;:,7&#93;,ctry&#61;dn&#41; #we use 2018
 
-		  	df&#91;:,:nace4&#93;.&#61;string.&#40;df.nace&#41;
+	df&#91;:,:nace4&#93;.&#61;string.&#40;df.nace&#41;
 
-			mapcols&#40;col -&gt; replace&#33;&#40;col, &quot;n.a.&quot;&#61;&gt; &quot;-1&quot;&#41;, df&#41;
-			mapcols&#40;col -&gt; replace&#33;&#40;col, &quot;&quot;&#61;&gt; &quot;-1&quot;&#41;, df&#41;
-			df.xx1&#61;coalesce.&#40;df.xx1, &quot;-1&quot;&#41; ; 			df.xx2&#61;coalesce.&#40;df.xx2, &quot;-1&quot;&#41; ; 			df.xx3&#61;coalesce.&#40;df.xx2, &quot;-1&quot;&#41;
-			df.xx1&#61;tryparse.&#40;Float64,string.&#40;df.xx1&#41;&#41;; 	df.xx2&#61;tryparse.&#40;Float64,string.&#40;df.xx2&#41;&#41; ;  df.xx3&#61;tryparse.&#40;Float64,string.&#40;df.xx3&#41;&#41;
+	mapcols&#40;col -&gt; replace&#33;&#40;col, &quot;n.a.&quot;&#61;&gt; &quot;-1&quot;&#41;, df&#41;
+	mapcols&#40;col -&gt; replace&#33;&#40;col, &quot;&quot;&#61;&gt; &quot;-1&quot;&#41;, df&#41;
+	df.xx1&#61;coalesce.&#40;df.xx1, &quot;-1&quot;&#41; ; 			df.xx2&#61;coalesce.&#40;df.xx2, &quot;-1&quot;&#41; ; 			df.xx3&#61;coalesce.&#40;df.xx2, &quot;-1&quot;&#41;
+	df.xx1&#61;tryparse.&#40;Float64,string.&#40;df.xx1&#41;&#41;; 	df.xx2&#61;tryparse.&#40;Float64,string.&#40;df.xx2&#41;&#41; ;  df.xx3&#61;tryparse.&#40;Float64,string.&#40;df.xx3&#41;&#41;
 
-			###we now create different DFs to identify at least one value of xxenues
-			df&#61;df&#91;&#40;df.xx1 .&gt;0&#41; .| &#40;df.xx2 .&gt;0 .| &#40;df.xx3 .&gt;0&#41;&#41;, :&#93;
-			df&#91;:,:xx&#93;.&#61;df.xx1
-			&#91;&#40;if df.xx1&#91;i&#93;&lt;&#61;0 df.xx&#91;i&#93;&#61;df.xx2&#91;i&#93; end&#41; for i in eachindex&#40;df.xx&#41;&#93;
-			&#91;&#40;if df.xx&#91;i&#93;&lt;&#61;0 df.xx&#91;i&#93;&#61;df.xx3&#91;i&#93; end&#41; for i in eachindex&#40;df.xx&#41;&#93;
-			&#91;&#40;if df.xx&#91;i&#93;&lt;&#61;0 df.xx&#91;i&#93;&#61;-1 end&#41; for i in eachindex&#40;df.xx&#41;&#93;
-			df&#61;unique&#40;df&#91;:,&#91;:ctry,:id,:nace4,:xx&#93;&#93;&#41;
+	###we now create different DFs to identify at least one value of xxenues
+	df&#61;df&#91;&#40;df.xx1 .&gt;0&#41; .| &#40;df.xx2 .&gt;0 .| &#40;df.xx3 .&gt;0&#41;&#41;, :&#93;
+	df&#91;:,:xx&#93;.&#61;df.xx1
+	&#91;&#40;if df.xx1&#91;i&#93;&lt;&#61;0 df.xx&#91;i&#93;&#61;df.xx2&#91;i&#93; end&#41; for i in eachindex&#40;df.xx&#41;&#93;
+	&#91;&#40;if df.xx&#91;i&#93;&lt;&#61;0 df.xx&#91;i&#93;&#61;df.xx3&#91;i&#93; end&#41; for i in eachindex&#40;df.xx&#41;&#93;
+	&#91;&#40;if df.xx&#91;i&#93;&lt;&#61;0 df.xx&#91;i&#93;&#61;-1 end&#41; for i in eachindex&#40;df.xx&#41;&#93;
+	df&#61;unique&#40;df&#91;:,&#91;:ctry,:id,:nace4,:xx&#93;&#93;&#41;
 
-			df&#91;:,:nace2&#93;.&#61;&quot;&quot; ; df&#91;:,:nace3&#93;.&#61;&quot;&quot;
-			&#91;df.nace2&#91;i&#93;&#61;SubString&#40;df.nace4&#91;i&#93;,1:2&#41; for i in eachindex&#40;df.nace4&#41;&#93;
-			&#91;df.nace3&#91;i&#93;&#61;SubString&#40;df.nace4&#91;i&#93;,1:3&#41; for i in eachindex&#40;df.nace4&#41;&#93;
-			df&#61;df&#91;df.xx.&gt;0,:&#93;
+	df&#91;:,:nace2&#93;.&#61;&quot;&quot; ; df&#91;:,:nace3&#93;.&#61;&quot;&quot;
+	&#91;df.nace2&#91;i&#93;&#61;SubString&#40;df.nace4&#91;i&#93;,1:2&#41; for i in eachindex&#40;df.nace4&#41;&#93;
+	&#91;df.nace3&#91;i&#93;&#61;SubString&#40;df.nace4&#91;i&#93;,1:3&#41; for i in eachindex&#40;df.nace4&#41;&#93;
+	df&#61;df&#91;df.xx.&gt;0,:&#93;
 
-			df&#61;unique&#40;df&#41;
-			df&#61;rename&#40;df, :xx &#61;&gt; Symbol&#40;&quot;&#36;var&quot;&#41;&#41;
+	df&#61;unique&#40;df&#41;
+	df&#61;rename&#40;df, :xx &#61;&gt; Symbol&#40;&quot;&#36;var&quot;&#41;&#41;
 
-			return df
-		  end
+	return df
+end
 
 dfs&#61;&#91;DataFrame&#40;CSV.File&#40;&quot;&#36;&#40;homedir&#40;&#41;&#41;\\Desktop\\ORBIS\\allcountries\\&#36;&#40;value&#41;_2019_rev_manuf.csv&quot;&#41;&#41;  for &#40;key,value&#41; in enumerate&#40;dn.nctry&#41;&#93; # to create a vector with dfs
 &#91;dfs&#91;i&#93;&#61;cleanrev&#40;dfs&#91;i&#93;,dn&#91;i,:cctry&#93;,Symbol&#40;&quot;orev&quot;&#41;&#41; for i in eachindex&#40;dn.ind&#41;&#93;
