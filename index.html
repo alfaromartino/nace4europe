@@ -78,7 +78,7 @@ pre code.hljs.plaintext {
 </header>
 
   <!-- Content appended here -->
-<div class="franklin-content"><section id="content" class="scrollspy section-bg-color">
+<div class="franklin-content"><section id="content" class="scrollspy">
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
@@ -91,7 +91,7 @@ pre code.hljs.plaintext {
     </div>
   </div>
 </section>
-<section id="relevance_of_the_estimates" class="scrollspy">
+<section id="relevance_of_the_estimates" class="scrollspy section-bg-color">
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
@@ -110,29 +110,36 @@ pre code.hljs.plaintext {
 </li>
 </ol>
 <p>The <strong>countries</strong> covered are Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy,  Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine. </p>
-<p>The countries chosen have a high coverage in ORBIS relative to Eurostat &#40;except for Germany, which I included given its importance&#41;. The following tables show the percentage of revenue covered in each country. </p>
-<pre><code class="plaintext code-output">could not open file /home/runner\Desktop\ORBIS\eurostat\turnover_calc\newcode02\page\_assets\scripts\compare_rev03.jl
-</code></pre>
+<p>The countries chosen have a high coverage in ORBIS relative to Eurostat &#40;except for Germany, which I included given its importance&#41;. The following tables show the percentage of revenue covered by ORBIS in each country. <br/> <br/></p>
+ <div style="text-align:center;"> <figure class="figure">
+  <img src="/nace4europe/assets/scripts/ind_rev_orbis_west.svg" alt="" class="figure-img img-fluid " width="150%" style="border-radius:2px;">
+  
+</figure>
+ <figure class="figure">
+  <img src="/nace4europe/assets/scripts/ind_rev_orbis_east.svg" alt="" class="figure-img img-fluid " width="150%" style="border-radius:2px;">
+  
+</figure>
+  </div>
 <p>      </div>
     </div>
   </div>
 </section>
-<section id="links_for_downloading_the_estimates" class="scrollspy section-bg-color">
+<section id="links_for_downloading_the_estimates" class="scrollspy">
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
         <h2>Links for Downloading the Estimates</h2><a id="sec0" class="anchor"></a> The files are in CSV format.<br/> Results at the 4-digit level are <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv">here</a> <br/> Results at the 2-digit level are <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv">here</a></p>
 <p>You can also access the files directly. <br/> In <strong>Julia</strong> </p>
-<pre><code class="language-julia">using CSV, Downloads
-nace4 &#61; DataFrame&#40;CSV.File&#40;Downloads.download&#40;&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv&quot;&#41;&#41;&#41; 
-nace2 &#61; DataFrame&#40;CSV.File&#40;Downloads.download&#40;&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv&quot;&#41;&#41;&#41;</code></pre>
+<pre><code class="julia hljs"><span class="hljs-keyword">using</span> CSV, Downloads
+nace4 = DataFrame(CSV.File(Downloads.download(<span class="hljs-string">&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv&quot;</span>))) 
+nace2 = DataFrame(CSV.File(Downloads.download(<span class="hljs-string">&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv&quot;</span>)))</code></pre>
 <p>In <strong>R</strong></p>
-<pre><code class="language-Python">nace4 &lt;- read.csv&#40;&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv&quot;&#41;
-nace2 &lt;- read.csv&#40;&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv&quot;&#41;</code></pre>
+<pre><code class="Python hljs">nace4 &lt;- read.csv(<span class="hljs-string">&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv&quot;</span>)
+nace2 &lt;- read.csv(<span class="hljs-string">&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv&quot;</span>)</code></pre>
 <p>In <strong>Python</strong></p>
-<pre><code class="language-Python">import pandas as pd
-nace4 &#61; pd.read_csv&#40;&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv&quot;&#41;
-nace2 &#61; pd.read_csv&#40;&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv&quot;&#41;</code></pre>
+<pre><code class="Python hljs"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd
+nace4 = pd.read_csv(<span class="hljs-string">&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv&quot;</span>)
+nace2 = pd.read_csv(<span class="hljs-string">&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv&quot;</span>)</code></pre>
 <p>      </div>
     </div>
   </div>
@@ -145,8 +152,8 @@ nace2 &#61; pd.read_csv&#40;&quot;https://raw.githubusercontent.com/alfaromartin
 </div><!-- CONTENT ENDS HERE -->
   
   
-      <script src="/nace4europe/libs/highlight/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>
+      
+
 
   
   <script src="/nace4europe/libs/simple-scrollspy.min.js"></script>
