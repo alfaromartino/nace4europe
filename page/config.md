@@ -21,8 +21,7 @@ The latter allows you to plug in values that you would have defined here.
 @def title       = "Revenue Shares for European Countries"
 @def prepath     = "nace4europe"
 @def description = """
-                   It combines information of Eurostat and Orbis to produce
-                   estimates of revenue shares at 4- and 2-digits level (NACE rev. 2).
+                   Estimates of revenue shares at the 4- and 2-digit levels (NACE rev. 2) by combining information from Eurostat and Orbis
                    """
 @def authors     = "Martin Alfaro"
 
@@ -82,7 +81,7 @@ The latter allows you to plug in values that you would have defined here.
 @def header_margin_top  = "0px" <!-- 55-60px ~ touching nav bar, ME: set 0 if I disable the navigation bar -->
 
 @def use_hero           = false
-@def hero_width         = "80%"
+@def hero_width         = "90%"
 @def hero_margin_top    = "100px"
 
 @def add_github_view  = true
@@ -95,7 +94,7 @@ NOTE:
                     you can also set it for individual sections by specifying
                     the width argument: `\begin{:section, ..., width=10}`.
 -->
-@def section_width = 10
+@def section_width = 11
 
 <!-- COLOR PALETTE
 You can use Hex, RGB or SVG color names; these tools are useful to choose:

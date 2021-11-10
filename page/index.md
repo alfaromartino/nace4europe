@@ -2,24 +2,34 @@
      ABOUT
     ============================== -->
 \begin{section}{title="Contents", name="content"}
-(1) [Summary](#summ) \\
-(1) [Links for Downloading the Estimates](#sec0) \\
-(2) [Roadmap of Code](#sec1) \\
-&ensp; &ensp; (2a) [Eurostat -- Cleaning](#sec2) \\  
-&ensp; &ensp; (2b) [To GitHub](#sec3) \\ 
-&ensp; &ensp; (2c) [To GitHub](#sec3) \\ 
+(1) [Relevance of the Estimates](#summ) \\
+(2) [Links for Downloading the Estimates](#sec0) \\
+(3) [Roadmap of Code](#sec1) \\
+&ensp; &ensp; (3a) [Eurostat -- Cleaning](#sec2) \\  
+&ensp; &ensp; (3b) [To GitHub](#sec3) \\ 
+&ensp; &ensp; (3c) [To GitHub](#sec3) \\ 
 
-The **countries** covered are: Austria, Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy, 
-Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine.  \\ \\
+The **countries** covered are Austria, Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy, 
+Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine.  \\
 
 The code has been written in \figure{path="/assets/logo_julia.png", width="10%", style="border-radius:5px;"}
-and the page created with [PkgPage.jl](https://github.com/tlienart/PkgPage.jl)
+and this page created with [PkgPage.jl](https://github.com/tlienart/PkgPage.jl)
 \end{section}
 
 <!-- ==============================
      SUMMARY
      ============================== -->
-\begin{section}{title="Summary"}\label{summ}
+\begin{section}{title="Relevance of the Estimates"}\label{summ}
+Eurostat provides official statistics for revenue of industries in the **manufacturing sector** (sector C, with codes from 1000 to 3399, as defined by the NACE rev 2 classification). They are presented in the dataset `sbs_na_ind_r2`. \\
+
+However, there's an **issue**: not all values are reported due to confidentiality matters. This is even more pervasive for the total production reported by Prodcom classification (dataset `DS-066342`), which is dissagregated at the 8-digit level. \\
+
+Attending to this, the page provides estimates of revenue for 20 European countries. They are reported for some baseline year (i.e., 2018) and at the NACE (rev. 2) 4-digit level. The completion is based on an iterative procedure that recovers revenue shares within manufacturing, through the following steps:
+1. Based on the revenues by Eurostat in Euros, define
+	&ensp; &ensp; &ensp; (a) revenue shares at the 2-digit level relative to manufacturing,\\
+	&ensp; &ensp; &ensp; (b) revenue shares at the 4-digit level relative to the industry's 2-digit level.
+2. Given remaining missing shares in (a) and (b), define relative shares based on previous years. To improve accuracy, the completion of relative shares are performed at the 4- and 2-digit level separately.
+1. If there are still missing shares, we use the revenue from the [ORBIS dataset](https://www.bvdinfo.com/en-gb/our-products/data/international/orbis). This exploits that ORBIS reports each firm's revenue at the NACE 4-digit level, allowing us to compute any remaining relative share at the 4- and 2-digit levels.\\
 
 
 
