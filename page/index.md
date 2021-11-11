@@ -43,8 +43,8 @@ The countries chosen have a high coverage in ORBIS relative to Eurostat (except 
      ESTIMATES
      ============================== -->
 \begin{section}{title="Links for Downloading the Estimates"}\label{sec0}
-Estimates at the 4-digit level are [here](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv). `rev4` indicates the value in Euros, and `share4` the revenue share within a country's manufacturing revenue. \\
-Estimates at the 2-digit level are [here](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv). `rev2` indicates the value in Euros, and `share2` the revenue share within a country's manufacturing revenue.\\
+Estimates at the 4-digit level are [here](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv). `rev4` indicates the value in Euros, and `share4` the revenue share relative to a country's manufacturing revenue. \\
+Estimates at the 2-digit level are [here](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv). `rev2` indicates the value in Euros, and `share2` the revenue share relative to a country's manufacturing revenue.\\
 
 All files are in CSV format and you can also access the files directly: \\
 In **Julia** 
