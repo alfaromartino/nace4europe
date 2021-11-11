@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Martin Alfaro">
-  <title>Revenue Shares for European Countries</title>
+  <title>Revenue Estimates for European Countries</title>
 
   <link rel="icon" type="image/png"  href="/nace4europe/assets/favicon.ico">
 
@@ -67,8 +67,8 @@ pre code.hljs.plaintext {
   
     <div class="jumbotron jumbotron-fluid container-fluid bg-primary">
   
-    <h1>Revenue Shares for European Countries</h1>
-    <div class="lead">Estimates of revenue shares at the 4- and 2-digit levels (NACE rev. 2) by combining information from Eurostat and ORBIS
+    <h1>Revenue Estimates for European Countries</h1>
+    <div class="lead">Estimates of revenue (in shares and Euros) at the 4- and 2-digit levels (NACE rev. 2) by combining information from Eurostat and ORBIS
 </div>
     
       <a class="name_format" href="https://sites.google.com/view/alfaromartino/" target="_blank" rel="noopener noreferrer" data-size="large" aria-label="View on GitHub">Martin Alfaro</a>
@@ -96,8 +96,8 @@ pre code.hljs.plaintext {
     <div class="row">
       <div class="col-lg-11 mx-auto">
         <h2>Relevance of the Estimates</h2><a id="summ" class="anchor"></a> Eurostat provides official statistics for revenue of industries in the <strong>manufacturing sector</strong> &#40;sector C, with codes from 1000 to 3399, as defined by the NACE rev 2 classification&#41;. They are presented in the dataset <code>sbs_na_ind_r2</code>. <br/></p>
-<p>However, there&#39;s an <strong>issue</strong>: not all values are reported due to confidentiality matters. This is even more pervasive for the total production reported by Prodcom classification &#40;dataset <code>DS-066342</code>&#41;, which is dissagregated at the 8-digit level. <br/></p>
-<p>Attending to this, the page provides estimates of revenue for 19 European countries. They are reported for some baseline year &#40;i.e., 2018&#41; and at the NACE &#40;rev. 2&#41; 4-digit level. The completion is based on an iterative procedure that recovers revenue shares within manufacturing, through the following steps:</p>
+<p>The <strong>issue</strong> we face is that not all values are reported due to confidentiality matters. This is even more pervasive for the total production reported by Prodcom classification &#40;dataset <code>DS-066342</code>&#41;, which is dissagregated at the 8-digit level. <br/></p>
+<p>Attending to this, this page provides estimates of revenue for 19 European countries. They consider the year 2018 and report revenues at the NACE &#40;rev. 2&#41; 4-digit level. The completion is based on an iterative procedure that recovers revenue shares within manufacturing, through the following steps for each country:</p>
 <ol>
 <li><p>Based on the revenues by Eurostat in Euros, define</p>
 </li>
@@ -128,8 +128,8 @@ pre code.hljs.plaintext {
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
-        <h2>Links for Downloading the Estimates</h2><a id="sec0" class="anchor"></a> The files are in CSV format.<br/> Results at the 4-digit level are <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv">here</a> <br/> Results at the 2-digit level are <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv">here</a></p>
-<p>You can also access the files directly. <br/> In <strong>Julia</strong> </p>
+        <h2>Links for Downloading the Estimates</h2><a id="sec0" class="anchor"></a> Estimates at the 4-digit level are <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv">here</a>. <code>rev4</code> indicates the value in Euros, and <code>share4</code> the revenue share within a country&#39;s manufacturing revenue. <br/> Estimates at the 2-digit level are <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv">here</a>. <code>rev2</code> indicates the value in Euros, and <code>share2</code> the revenue share within a country&#39;s manufacturing revenue.<br/></p>
+<p>All files are in CSV format and you can also access the files directly: <br/> In <strong>Julia</strong> </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> CSV, Downloads
 nace4 = DataFrame(CSV.File(Downloads.download(<span class="hljs-string">&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv&quot;</span>))) 
 nace2 = DataFrame(CSV.File(Downloads.download(<span class="hljs-string">&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv&quot;</span>)))</code></pre>
