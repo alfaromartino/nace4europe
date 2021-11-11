@@ -15,9 +15,9 @@ and this page was created using [PkgPage.jl](https://github.com/tlienart/PkgPage
 \begin{section}{title="Relevance of the Estimates"}\label{summ}
 Eurostat provides official statistics for revenue of industries in the **manufacturing sector** (sector C, with codes from 1000 to 3399, as defined by the NACE rev 2 classification). They are presented in the dataset `sbs_na_ind_r2`. \\
 
-However, there's an **issue**: not all values are reported due to confidentiality matters. This is even more pervasive for the total production reported by Prodcom classification (dataset `DS-066342`), which is dissagregated at the 8-digit level. \\
+The **issue** we face is that not all values are reported due to confidentiality matters. This is even more pervasive for the total production reported by Prodcom classification (dataset `DS-066342`), which is dissagregated at the 8-digit level. \\
 
-Attending to this, the page provides estimates of revenue for 19 European countries. They are reported for some baseline year (i.e., 2018) and at the NACE (rev. 2) 4-digit level. The completion is based on an iterative procedure that recovers revenue shares within manufacturing, through the following steps:
+Attending to this, this page provides estimates of revenue for 19 European countries. They consider the year 2018 and report revenues at the NACE (rev. 2) 4-digit level. The completion is based on an iterative procedure that recovers revenue shares within manufacturing, through the following steps for each country:
 1. Based on the revenues by Eurostat in Euros, define
 	&ensp; &ensp; &ensp; (a) revenue shares at the 2-digit level relative to manufacturing, and \\
 	&ensp; &ensp; &ensp; (b) revenue shares at the 4-digit level relative to the industry's 2-digit level.
@@ -43,11 +43,10 @@ The countries chosen have a high coverage in ORBIS relative to Eurostat (except 
      ESTIMATES
      ============================== -->
 \begin{section}{title="Links for Downloading the Estimates"}\label{sec0}
-The files are in CSV format.\\
-Results at the 4-digit level are [here](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv) \\
-Results at the 2-digit level are [here](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv)
+Estimates at the 4-digit level are [here](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv). `rev4` indicates the value in Euros, and `share4` the revenue share within a country's manufacturing revenue. \\
+Estimates at the 2-digit level are [here](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv). `rev2` indicates the value in Euros, and `share2` the revenue share within a country's manufacturing revenue.\\
 
-You can also access the files directly. \\
+All files are in CSV format and you can also access the files directly: \\
 In **Julia** 
 
 ```julia

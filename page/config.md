@@ -18,10 +18,10 @@ The latter allows you to plug in values that you would have defined here.
              `prepath` to an empty string. Finally, adjust this if you want the
              deployed page to be in a subfolder e.g.: `YourPackage.jl/web/`.
 -->
-@def title       = "Revenue Shares for European Countries"
+@def title       = "Revenue Estimates for European Countries"
 @def prepath     = "nace4europe"
 @def description = """
-                   Estimates of revenue shares at the 4- and 2-digit levels (NACE rev. 2) by combining information from Eurostat and ORBIS
+                   Estimates of revenue (in shares and Euros) at the 4- and 2-digit levels (NACE rev. 2) by combining information from Eurostat and ORBIS
                    """
 @def authors     = "Martin Alfaro"
 
