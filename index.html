@@ -124,11 +124,11 @@ pre code.hljs.plaintext {
     </div>
   </div>
 </section>
-<section id="links_for_downloading_the_estimates" class="scrollspy">
+<section id="links_to_download_the_estimates" class="scrollspy">
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
-        <h2>Links for Downloading the Estimates</h2><a id="sec0" class="anchor"></a> Estimates at the 4-digit level can be downloaded <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv">here</a>. The variable <code>rev4</code> indicates the value in Euros, and <code>share4</code> the revenue share relative to a country&#39;s manufacturing revenue. <br/> Estimates at the 2-digit level can be downloaded <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv">here</a>. The variable <code>rev2</code> indicates the value in Euros, and <code>share2</code> the revenue share relative to a country&#39;s manufacturing revenue.<br/></p>
+        <h2>Links to Download the Estimates</h2><a id="sec0" class="anchor"></a> Estimates at the 4-digit level can be downloaded <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv">here</a>. The variable <code>rev4</code> indicates the value in Euros, and <code>share4</code> the revenue share relative to a country&#39;s manufacturing revenue. <br/> Estimates at the 2-digit level can be downloaded <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv">here</a>. The variable <code>rev2</code> indicates the value in Euros, and <code>share2</code> the revenue share relative to a country&#39;s manufacturing revenue.<br/></p>
 <p>All files are in CSV format, and you can also access to the files directly in the following way. <br/> In <strong>Julia</strong> </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> CSV, Downloads
 nace4 = DataFrame(CSV.File(Downloads.download(<span class="hljs-string">&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv&quot;</span>))) 
