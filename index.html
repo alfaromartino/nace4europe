@@ -68,7 +68,7 @@ pre code.hljs.plaintext {
     <div class="jumbotron jumbotron-fluid container-fluid bg-primary">
   
     <h1>Revenue Estimates for European Countries</h1>
-    <div class="lead">Estimates of revenue (in shares and Euros) at the 4- and 2-digit levels (NACE rev. 2) by combining information from Eurostat and ORBIS
+    <div class="lead">Estimates of manufacturing revenue (in shares and Euros) at the 4- and 2-digits levels NACE rev. 2, by combining information from Eurostat and ORBIS
 </div>
     
       <a class="name_format" href="https://sites.google.com/view/alfaromartino/" target="_blank" rel="noopener noreferrer" data-size="large" aria-label="View on GitHub">Martin Alfaro</a>
@@ -82,12 +82,12 @@ pre code.hljs.plaintext {
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
-        <h2>Contents</h2> &#40;1&#41; <a href="#summ">Relevance of the Estimates</a> <br/> &#40;2&#41; <a href="#sec0">Links for Downloading the Estimates</a> <br/></p>
+        <h2>Contents</h2> &#40;1&#41; <a href="#summ">Relevance of the Estimates</a> <br/> &#40;2&#41; <a href="#sec0">Links to Download the Estimates</a> <br/></p>
 <p>The estimates have been derived using <figure class="figure">
   <img src="/nace4europe/assets/logo_julia.png" alt="" class="figure-img img-fluid " width="10%" style="border-radius:2px;">
   
 </figure>
- and this page was created using <a href="https://github.com/tlienart/PkgPage.jl">PkgPage.jl</a>       </div>
+ and this page created using <a href="https://github.com/tlienart/PkgPage.jl">PkgPage.jl</a>       </div>
     </div>
   </div>
 </section>
@@ -95,28 +95,28 @@ pre code.hljs.plaintext {
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
-        <h2>Relevance of the Estimates</h2><a id="summ" class="anchor"></a> Eurostat provides official statistics for revenue of industries in the <strong>manufacturing sector</strong> &#40;sector C, with codes from 1000 to 3399, as defined by the NACE rev 2 classification&#41;. They are presented in the dataset <code>sbs_na_ind_r2</code>. <br/></p>
-<p>The <strong>issue</strong> we face is that not all values are reported due to confidentiality matters. This is even more pervasive for the total production reported by Prodcom classification &#40;dataset <code>DS-066342</code>&#41;, which is dissagregated at the 8-digit level. <br/></p>
-<p>Attending to this, this page provides estimates of revenue for 19 European countries. They consider the year 2018 and report revenues at the NACE &#40;rev. 2&#41; 4-digit level. The completion is based on an iterative procedure that recovers revenue shares within manufacturing, through the following steps for each country:</p>
+        <h2>Relevance of the Estimates</h2><a id="summ" class="anchor"></a> Eurostat provides official statistics for industry revenues in the <strong>manufacturing sector</strong> &#40;sector C, with codes from 1000 to 3399, as defined by the NACE rev. 2 classification&#41;. They are presented in the dataset <code>sbs_na_ind_r2</code>. <br/></p>
+<p>The <strong>issue</strong> is that not all values are reported due to confidentiality matters. This is even more pervasive for the total production broken down by Prodcom classification &#40;dataset <code>DS-066342</code>&#41;, which is disaggregated at the 8-digits level. <br/></p>
+<p>Attending to this, this page provides estimates of revenue for 19 European countries. The estimates consider the year 2018 and report revenues at the NACE &#40;rev. 2&#41; 4-digits . The completion is based on an iterative procedure that recovers revenue shares within manufacturing. This procedure consists of the following steps for each country:</p>
 <ol>
 <li><p>Based on the revenues by Eurostat in Euros, define</p>
 </li>
 </ol>
-<p>&ensp; &ensp; &ensp; &#40;a&#41; revenue shares at the 2-digit level relative to manufacturing, and <br/> &ensp; &ensp; &ensp; &#40;b&#41; revenue shares at the 4-digit level relative to the industry&#39;s 2-digit level.</p>
+<p>&ensp; &ensp; &ensp; &#40;a&#41; revenue shares at the 2-digit level relative to manufacturing, and <br/> &ensp; &ensp; &ensp; &#40;b&#41; revenue shares at the 4-digit level relative to the industry&#39;s 2-digits level.</p>
 <ol start="2">
-<li><p>Given remaining missing shares in &#40;a&#41; and &#40;b&#41;, define relative shares based on previous years. To improve accuracy, the completion of relative shares are performed at the 4- and 2-digit level separately.</p>
+<li><p>Given remaining missing shares in &#40;a&#41; and &#40;b&#41;, define relative shares based on previous years. To improve accuracy, the completion of relative shares is performed at the 4- and 2-digits levels separately.</p>
 </li>
-<li><p>If there are still missing shares, we use information from the <a href="https://www.bvdinfo.com/en-gb/our-products/data/international/orbis">ORBIS dataset</a>. This exploits that ORBIS reports each firm&#39;s revenue at the NACE 4-digit level, allowing us to compute any remaining relative share at the 4- and 2-digit levels.<br/></p>
+<li><p>If there are still missing shares, I use information from the <a href="https://www.bvdinfo.com/en-gb/our-products/data/international/orbis">ORBIS dataset</a>. It exploits that ORBIS reports each firm&#39;s revenue at the NACE 4-digit level, making it possible to compute any remaining relative share at the 4- and 2-digits levels.<br/></p>
 </li>
 </ol>
 <p>The <strong>countries</strong> covered are Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy,  Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine. </p>
-<p>The countries chosen have a high coverage in ORBIS relative to Eurostat &#40;except for Germany, which I included given its importance&#41;. The following tables show the percentage of revenue covered by ORBIS in each country. <br/> <br/></p>
+<p>The countries chosen have high coverage in ORBIS relative to Eurostat &#40;except for Germany, which I included given its importance&#41;. The following tables show the percentage of revenue covered by ORBIS in each country. <br/> <br/></p>
  <div style="text-align:center;"> <figure class="figure">
-  <img src="/nace4europe/assets/scripts/ind_rev_orbis_west.svg" alt="" class="figure-img img-fluid " width="150%" style="border-radius:2px;">
+  <img src="/nace4europe/assets/scripts/ind_rev_orbis_west.svg" alt="" class="figure-img img-fluid " width="175%" style="border-radius:2px;">
   
 </figure>
  <figure class="figure">
-  <img src="/nace4europe/assets/scripts/ind_rev_orbis_east.svg" alt="" class="figure-img img-fluid " width="150%" style="border-radius:2px;">
+  <img src="/nace4europe/assets/scripts/ind_rev_orbis_east.svg" alt="" class="figure-img img-fluid " width="175%" style="border-radius:2px;">
   
 </figure>
   </div>
@@ -128,8 +128,8 @@ pre code.hljs.plaintext {
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
-        <h2>Links for Downloading the Estimates</h2><a id="sec0" class="anchor"></a> Estimates at the 4-digit level are <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv">here</a>. <code>rev4</code> indicates the value in Euros, and <code>share4</code> the revenue share relative to a country&#39;s manufacturing revenue. <br/> Estimates at the 2-digit level are <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv">here</a>. <code>rev2</code> indicates the value in Euros, and <code>share2</code> the revenue share relative to a country&#39;s manufacturing revenue.<br/></p>
-<p>All files are in CSV format and you can also access the files directly: <br/> In <strong>Julia</strong> </p>
+        <h2>Links for Downloading the Estimates</h2><a id="sec0" class="anchor"></a> Estimates at the 4-digit level can be downloaded <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv">here</a>. The variable <code>rev4</code> indicates the value in Euros, and <code>share4</code> the revenue share relative to a country&#39;s manufacturing revenue. <br/> Estimates at the 2-digit level can be downloaded <a href="https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv">here</a>. The variable <code>rev2</code> indicates the value in Euros, and <code>share2</code> the revenue share relative to a country&#39;s manufacturing revenue.<br/></p>
+<p>All files are in CSV format, and you can also access to the files directly in the following way. <br/> In <strong>Julia</strong> </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> CSV, Downloads
 nace4 = DataFrame(CSV.File(Downloads.download(<span class="hljs-string">&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace4.csv&quot;</span>))) 
 nace2 = DataFrame(CSV.File(Downloads.download(<span class="hljs-string">&quot;https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/euro_nace2.csv&quot;</span>)))</code></pre>
