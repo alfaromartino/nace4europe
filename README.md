@@ -1,2 +1,2 @@
 # nace4europe
-Estimates based on Eurostat and Orbis for revenue shares of  each industry at the Nace 4 digits level.
+Estimates for revenue shares of manufacturing industries  at NACE 4-digits level (based on information form Eurostat and ORBIS).

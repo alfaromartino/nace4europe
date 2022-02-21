@@ -21,7 +21,7 @@ The latter allows you to plug in values that you would have defined here.
 @def title       = "Revenue Estimates for European Countries"
 @def prepath     = "nace4europe"
 @def description = """
-                   Estimates of revenue (in shares and Euros) at the 4- and 2-digit levels (NACE rev. 2) by combining information from Eurostat and ORBIS
+                   Estimates of manufacturing revenue (in shares and Euros) at the 4- and 2-digits levels NACE rev. 2, by combining information from Eurostat and ORBIS
                    """
 @def authors     = "Martin Alfaro"
 
