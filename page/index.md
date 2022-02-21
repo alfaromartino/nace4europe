@@ -25,7 +25,7 @@ Attending to this, this page provides estimates of revenue for 19 European count
 1. If there are still missing shares, I use information from the [ORBIS dataset](https://www.bvdinfo.com/en-gb/our-products/data/international/orbis). It exploits that ORBIS reports each firm's revenue at the NACE 4-digit level, making it possible to compute any remaining relative share at the 4- and 2-digits levels.\\
 
 The **countries** covered are Bulgaria, Croatia, Czech Republic, Finland, France, Germany, UK, Hungary, Italy, 
-Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, and Ukraine. 
+Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, and Sweden.
 
 The countries chosen have high coverage in ORBIS relative to Eurostat (except for Germany, which I included given its importance). The following tables show the percentage of revenue covered by ORBIS in each country. \\ \\
 
