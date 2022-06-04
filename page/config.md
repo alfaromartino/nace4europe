@@ -18,10 +18,12 @@ The latter allows you to plug in values that you would have defined here.
              `prepath` to an empty string. Finally, adjust this if you want the
              deployed page to be in a subfolder e.g.: `YourPackage.jl/web/`.
 -->
-@def title       = "Revenue Estimates for European Countries"
+@def title       = "Revenue Estimates for European Countries <br> (NACE rev. 2 at 4-digits level)"
 @def prepath     = "nace4europe"
-@def description = """
-                   Estimates of manufacturing revenue (in shares and Euros) at the 4- and 2-digits levels NACE rev. 2, by combining information from Eurostat and ORBIS
+@def description = """<br>
+                   Estimates of manufacturing revenue (in shares and Euros) at the 4- and 2-digits levels NACE rev. 2, 
+                   <br>
+                   combining information from Eurostat and ORBIS
                    """
 @def authors     = "Martin Alfaro"
 
@@ -119,7 +121,7 @@ NOTE:
 NOTE:
   - highlight_theme:    theme for the code, pick one from
                         https://highlightjs.org/static/demo/ for instance
-                        "github" or "atom-one-dark"; use lower case and replace
+                        "github" or "atom-one-dark" or "vs" or "github-dark-dimmed"; use lower case and replace
                         spaces with `-`.
   - code_border_radius: how rounded the corners of code blocks should be
   - code_output_indent: how much left-identation to add for "output blocks"
@@ -148,6 +150,6 @@ commands that are defined and used in PkgPage.jl
 
 \newcommand{\html}[1]{~~~#1~~~}
 
-\newenvironment{center}{\html{<div style="text-align:center;">}}{\html{</div>}}
+\newenvironment{center}{\html{<div styl e="text-align:center;">}}{\html{</div>}}
 
 \newenvironment{columns}{\html{<div class="container"><div class="row">}}{\html{</div></div>}}

@@ -46,5 +46,5 @@ pre code.hljs {
 }
 
 pre code.hljs.plaintext {
-  margin-left: {{code_output_indent}};
+  margin-left: {{code_output_indent}};  
 }
