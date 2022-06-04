@@ -41,15 +41,16 @@ a.anchor {
 }
 
 /* CODE */
+/* TO CHANGE THE MARGINS OF THE CODE, LOOK BELOW */
 
-pre { margin-bottom: 0.5em; }
+pre { margin-bottom: 0.5em;  margin-left:-10%; margin-right:-15%}
 pre code.hljs {
 	padding-left: 20px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 pre code.hljs.plaintext {
-	margin-bottom: 1em;
+	margin-bottom: 1em  
 }
 
 /* ADD ANY SPECIFIC TWEAKS YOU MIGHT WANT HERE */
@@ -69,3 +70,24 @@ code {
   .name_format:hover {
     color: rgb(28, 0, 128);
   }
+
+
+  .back_button {
+    color: white;
+    padding: 0.5em 1.0em;
+    text-decoration: none;
+    font-size: 100%;
+    }
+  
+    .back_button:hover {
+      color: rgb(28, 0, 128);
+    }
+
+    .julia_button {
+      color: white;      
+      text-decoration: none;
+      font-size: 100%;
+      }
+    .julia_button:hover {
+      color: rgb(28, 0, 128);
+    }
