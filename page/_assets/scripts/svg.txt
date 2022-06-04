@@ -1,5 +1,0 @@
-cd "C:\Users\Martin\Desktop\ORBIS\eurostat\turnover_calc\newcode02\page\_assets\scripts"
-pdf2svg ind_rev_orbis_east.pdf ind_rev_orbis_east.svg
-pdf2svg ind_rev_orbis_west.pdf ind_rev_orbis_west.svg
-
-
