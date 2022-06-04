@@ -70,7 +70,7 @@ See [here](/menu2/) for further details about the code and the procedure.
 \begin{section}{title="Links to Download the Estimates"}\label{sec0}
 
      
-The estimates are in CSV format and can be downloaded [HERE](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/RevenueManufacturing_NACE4.csv). The description of variables is provided in this [README.txt](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/readme.txt). It's worth emphasizing that the information covers the years 2012-2019, but it's cross-section&mdash;it is NOT panel data. \\ 
+The estimates are in CSV format and can be downloaded [HERE](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/RevenueManufacture_NACE4.csv). The description of variables is provided in this [README.txt](https://raw.githubusercontent.com/alfaromartino/nace4europe/main/page/_assets/readme.txt). It's worth emphasizing that the information covers the years 2012-2019, but it's cross-section&mdash;it is NOT panel data. \\ 
 
 You can also access the data directly: 
 
