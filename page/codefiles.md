@@ -78,7 +78,7 @@ The code consists of three files:\\
 (2) [`RelativeShare42.jl`](#share42) \\
 (3) [`RelativeShare21.jl`](#share21) 
 
-To describe the code, I refer to an _industry_ as a NACE 4-digits industry, a _sector_ by a NACE 2-digits industry., and _manufacturing_ by all sectors. The file `RelativeShare42.jl` computes revenue shares for each country-year-industry relative to its country-year-sector. The file `RelativeShare21.jl`does the same, but for each country-year-sector relative to manufacturing in each country-year. The file `main.jl` gathers all the results. 
+To describe the code, I refer to an _industry_ as a NACE 4-digits industry, a _sector_ by a NACE 2-digits industry, and _manufacturing_ by all sectors. The file `RelativeShare42.jl` computes revenue shares for each country-year-industry relative to its country-year-sector. The file `RelativeShare21.jl`does the same, but for each country-year-sector relative to manufacturing in each country-year. The file `main.jl` gathers all the results. 
 
 Running the code requires turnover data from Eurostat, which can be found [here](https://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=sbs_na_ind_r2&lang=en). It additionally builds on revenue information from companies obtained through the [ORBIS dataset](https://www.bvdinfo.com/en-gb/our-products/data/international/orbis). This information is proprietary, and I cleaned it before its use. 
 

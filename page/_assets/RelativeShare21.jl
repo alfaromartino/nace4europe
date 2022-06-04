@@ -189,7 +189,7 @@ temp1 = view(dff2, dff2.mis.==true,:)
     
 
 ##################################################
-# 		2b) WE SAVE THE RESULTS
+# 		4) WE SAVE THE RESULTS
 ##################################################
 dff2 = @pipe dff2[:,[:ctry,:year,:nace2,:rsh2,:manuf_rev]] |>
 			 sort(_,[:ctry,:nace2])
