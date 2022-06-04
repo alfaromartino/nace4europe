@@ -113,7 +113,97 @@ pre code.hljs.plaintext {
   <div class="container">
     <div class="row">
       <div class="col-lg-11 mx-auto">
-        <h2>`main.jl`</h2><a id="mainfile" class="anchor"></a> <p><span style="color:red;">// Couldn't find a file when trying to resolve an input request with relative path: `/_assets/scripts/main.jl`. //</span></p> </p>
+        <h2>`main.jl`</h2><a id="mainfile" class="anchor"></a> <pre><code class="julia hljs"><span class="hljs-keyword">using</span> DataFrames
+<span class="hljs-keyword">using</span> CSV
+<span class="hljs-keyword">using</span> <span class="hljs-built_in">Pipe</span>
+
+<span class="hljs-comment"># The following script gathers all the results </span>
+
+
+<span class="hljs-comment">########################</span>
+<span class="hljs-comment"># 			FOLDERS</span>
+<span class="hljs-comment">########################</span>
+<span class="hljs-keyword">module</span> Dir
+	base	       	 	= <span class="hljs-string">&quot;D:\\DATA&quot;</span>
+
+	info_raw	       	 	= <span class="hljs-string">&quot;<span class="hljs-subst">$(base)</span>\\information_raw&quot;</span>
+	info_clean	       	 	= <span class="hljs-string">&quot;<span class="hljs-subst">$(base)</span>\\information_cleaned&quot;</span>
+	
+	info_raw_eurostat	 	= <span class="hljs-string">&quot;<span class="hljs-subst">$(info_raw)</span>\\eurostat&quot;</span>		
+	info_clean_orbis	 	= <span class="hljs-string">&quot;<span class="hljs-subst">$(info_clean)</span>\\ORBIS&quot;</span>
+
+	codes      	 		= <span class="hljs-string">&quot;<span class="hljs-subst">$(base)</span>\\codes\\eurostat&quot;</span> 
+	algorithm_rev      	 	= <span class="hljs-string">&quot;<span class="hljs-subst">$(codes)</span>\\revenue\\all_years\\algorithms&quot;</span>
+	
+	output      	 	= <span class="hljs-string">&quot;<span class="hljs-subst">$(base)</span>\\outputs&quot;</span>
+	output_eurostat_rev	 	= <span class="hljs-string">&quot;<span class="hljs-subst">$(output)</span>\\eurostat\\revenue&quot;</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">using</span> Main.Dir
+
+
+<span class="hljs-comment">########################</span>
+<span class="hljs-comment"># LIST OF COUNTRIES</span>
+<span class="hljs-comment">########################</span>
+
+ctry=<span class="hljs-built_in">Dict</span>([
+	(<span class="hljs-string">&quot;Austria&quot;</span>, <span class="hljs-string">&quot;AT&quot;</span>), (<span class="hljs-string">&quot;Bulgaria&quot;</span>, <span class="hljs-string">&quot;BG&quot;</span>), (<span class="hljs-string">&quot;Czech&quot;</span>, <span class="hljs-string">&quot;CZ&quot;</span>), (<span class="hljs-string">&quot;Finland&quot;</span>, <span class="hljs-string">&quot;FI&quot;</span>), 
+	(<span class="hljs-string">&quot;Germany&quot;</span>, <span class="hljs-string">&quot;DE&quot;</span>), (<span class="hljs-string">&quot;UK&quot;</span>, <span class="hljs-string">&quot;UK&quot;</span>) ,(<span class="hljs-string">&quot;Hungary&quot;</span>, <span class="hljs-string">&quot;HU&quot;</span>),(<span class="hljs-string">&quot;Italy&quot;</span>, <span class="hljs-string">&quot;IT&quot;</span>), (<span class="hljs-string">&quot;Norway&quot;</span>, <span class="hljs-string">&quot;NO&quot;</span>),
+	(<span class="hljs-string">&quot;Poland&quot;</span>, <span class="hljs-string">&quot;PL&quot;</span>), (<span class="hljs-string">&quot;Portugal&quot;</span>, <span class="hljs-string">&quot;PT&quot;</span>), (<span class="hljs-string">&quot;Romania&quot;</span>, <span class="hljs-string">&quot;RO&quot;</span>), (<span class="hljs-string">&quot;Serbia&quot;</span>, <span class="hljs-string">&quot;RS&quot;</span>), 
+	(<span class="hljs-string">&quot;Slovakia&quot;</span>, <span class="hljs-string">&quot;SK&quot;</span>), (<span class="hljs-string">&quot;Slovenia&quot;</span>, <span class="hljs-string">&quot;SI&quot;</span>), (<span class="hljs-string">&quot;Spain&quot;</span>, <span class="hljs-string">&quot;ES&quot;</span>), (<span class="hljs-string">&quot;Sweden&quot;</span>, <span class="hljs-string">&quot;SE&quot;</span>), (<span class="hljs-string">&quot;Ukraine&quot;</span>, <span class="hljs-string">&quot;UA&quot;</span>),
+	(<span class="hljs-string">&quot;Croatia&quot;</span>, <span class="hljs-string">&quot;HR&quot;</span>), (<span class="hljs-string">&quot;France&quot;</span>, <span class="hljs-string">&quot;FR&quot;</span>)]) 
+
+ctry	=	<span class="hljs-built_in">Dict</span>(lowercase.([keys(ctry)...]).=&gt; [values(ctry)...])
+dn	=	DataFrame(nctry=[keys(ctry)...],cctry=[values(ctry)...])
+dn.ind  =	<span class="hljs-built_in">LinearIndices</span>(<span class="hljs-number">1</span>:length(dn.cctry)) <span class="hljs-comment">#numerical index of the country</span>
+
+
+
+<span class="hljs-comment">########################</span>
+<span class="hljs-comment"># 	ALGORITHMS</span>
+<span class="hljs-comment">########################</span>
+
+<span class="hljs-comment"># it creates the function `dff2 = create_dff2(baselineyear,dn)`</span>
+include(<span class="hljs-string">&quot;<span class="hljs-subst">$(Dir.algorithm_rev)</span>\\RelativeShare21.jl&quot;</span>)
+
+<span class="hljs-comment"># it creates the function `dff42 = create_dff4(baselineyear,dn)`</span>
+include(<span class="hljs-string">&quot;<span class="hljs-subst">$(Dir.algorithm_rev)</span>\\RelativeShare42.jl&quot;</span>)
+
+
+<span class="hljs-comment">########################</span>
+<span class="hljs-comment"># 	MERGING REVENUE DATA  </span>
+<span class="hljs-comment">########################</span>
+<span class="hljs-keyword">function</span> rev_dff(baselineyear, dn , info_raw_eurostat , info_clean_orbis)
+	dff21 = create_dff2(baselineyear, dn , info_raw_eurostat , info_clean_orbis)
+	dff42 = create_dff4(baselineyear, dn , info_raw_eurostat , info_clean_orbis)
+	dff = leftjoin(dff42,dff21,on=[:ctry,:nace2,:year])
+
+	dff[:,:share4] = dff.rsh42 .* dff.rsh21
+	dff[:,:revenue4] = dff.share4 .* dff.manuf_rev
+
+	rename!(dff, :rsh21 =&gt; :share2)
+	dff[:,:revenue2] = dff.share2 .* dff.manuf_rev
+
+	rename!(dff, :manuf_rev =&gt; :manuf_revenue, :ctry =&gt; :country)
+
+	dff = dff[:,[:year,:country,:nace4,:share4,:revenue4,:nace2,:share2,:revenue2,:manuf_revenue]]
+	<span class="hljs-keyword">return</span> dff
+<span class="hljs-keyword">end</span>
+
+
+dfr = <span class="hljs-keyword">let</span> 
+	 rev1(baselineyear) = rev_dff(baselineyear, dn , Dir.info_raw_eurostat , Dir.info_clean_orbis)
+	 <span class="hljs-meta">@pipe</span> [rev1(baselineyear) <span class="hljs-keyword">for</span> baselineyear <span class="hljs-keyword">in</span> <span class="hljs-number">2012</span>:<span class="hljs-number">2019</span>] |&gt;
+           vcat(_...) 
+	  <span class="hljs-keyword">end</span>
+
+dff = <span class="hljs-meta">@pipe</span> rename(dn[:,<span class="hljs-number">1</span>:<span class="hljs-number">2</span>], :cctry =&gt; :country, :nctry =&gt; :country_name) |&gt;
+			leftjoin(dfr,_,on=:country) |&gt;
+			rename(_, :country =&gt; :country_code) |&gt;
+			select(_,:year,:country_name,:country_code,:)
+
+
+CSV.write(<span class="hljs-string">&quot;<span class="hljs-subst">$(Dir.output_eurostat_rev)</span>\\RevenueManufacture_NACE4.csv&quot;</span>,dff)</code></pre> </p>
 <p>      </div>
     </div>
   </div>
@@ -123,7 +213,274 @@ pre code.hljs.plaintext {
     <div class="row">
       <div class="col-lg-11 mx-auto">
         <h2>`RelativeShare42.jl`</h2> <a id="share42" class="anchor"></a> The following is the procedure for computing a 4-digits Industry&#39;s Revenue Share relative to its 2-digits sector. It provides an industry&#39;s revenue share at 4-digits level <em>relative to</em> its 2-digits sector. </p>
-<p><p><span style="color:red;">// Couldn't find a file when trying to resolve an input request with relative path: `/_assets/scripts/RelativeShare42.jl`. //</span></p> </p>
+<p><pre><code class="julia hljs"><span class="hljs-keyword">using</span> DataFrames
+<span class="hljs-keyword">using</span> CSV
+<span class="hljs-keyword">using</span> <span class="hljs-built_in">Pipe</span>
+
+<span class="hljs-comment">#= 	This code creates the function `create_dff4`
+	It provides revenue shares at 4-digit NACE level relative to its 2-digits NACE level.=#</span>
+
+<span class="hljs-keyword">function</span> create_dff4(baselineyear,dn,dir_info_eurostat,dir_info_orbis)
+
+
+<span class="hljs-comment">###############################################</span>
+<span class="hljs-comment">#	 CLEANING FUNCTION FOR SBS EUROSTAT DATA</span>
+<span class="hljs-comment">###############################################</span>
+<span class="hljs-keyword">function</span> euroclean(yr)
+	df = <span class="hljs-meta">@pipe</span> DataFrame(CSV.File(<span class="hljs-string">&quot;<span class="hljs-subst">$(dir_info_eurostat)</span>\\turnover\\sbs_na_ind_r2_1_2005-2020.csv&quot;</span>; 
+                            select=[:TIME,:GEO,:INDIC_SB,:NACE_R2,:Value])) |&gt;
+	           _[(<span class="hljs-keyword">in</span>(dn.cctry).(_.GEO)) .&amp; (_.TIME.&gt;<span class="hljs-number">2007</span>) .&amp; (_.INDIC_SB.==<span class="hljs-string">&quot;V12110&quot;</span>),:] <span class="hljs-comment">#turnover from Eurostat&#x27;s page</span>
+
+	<span class="hljs-comment">#we start by minimally cleaning the dataset</span>
+	df = <span class="hljs-meta">@pipe</span>  DataFrame(year=df[:,:TIME],ctry=df[:,:GEO],nace=df[:,:NACE_R2],prod=df[:,:Value]) |&gt;
+				_[(_.year.==yr) .&amp; ((startswith).(_.nace,<span class="hljs-string">&quot;C&quot;</span>)),:]  <span class="hljs-comment"># we keep manufacturing</span>
+	df[!,:prod] = replace.(df.prod, <span class="hljs-string">&quot;,&quot;</span> =&gt; <span class="hljs-string">&quot;&quot;</span>) <span class="hljs-comment">#the data is presented with a comma</span>
+	[df.nace[i] = replace(df.nace[i], <span class="hljs-string">&quot;C&quot;</span> =&gt; <span class="hljs-string">&quot;&quot;</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> eachindex(df.nace) <span class="hljs-keyword">if</span> isequal(df.nace[i],<span class="hljs-string">&quot;C&quot;</span>)==<span class="hljs-number">0</span>]
+    
+    df[:,:erev] .= tryparse.(<span class="hljs-built_in">Float64</span>,string.(df.prod)) 	
+	[df.erev[i]  = df.erev[i]*<span class="hljs-number">1e6</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> eachindex(df.erev) <span class="hljs-keyword">if</span> isnothing(df.erev[i])==<span class="hljs-number">0</span>] <span class="hljs-comment"># value is in millions, so we reconvert them</span>
+    df = df[:,Not(<span class="hljs-string">&quot;prod&quot;</span>)]
+	
+    <span class="hljs-comment">#=  We discard countries that have no info for that year.
+        This is decided based on whether they report total revenue for manuf. =#</span>
+    df = <span class="hljs-keyword">let</span>
+            temp1         = copy(df[df.nace.==<span class="hljs-string">&quot;C&quot;</span>,:])
+            temp1[!,:tag] = isnothing.(temp1.erev).==<span class="hljs-number">0</span>
+            temp2         = temp1[:,[:year,:ctry,:tag]]
+            <span class="hljs-meta">@pipe</span> leftjoin(df,temp2,on=[:year,:ctry]) |&gt;
+                  _[(_.tag.==<span class="hljs-literal">true</span>) .&amp; (_.nace.!=<span class="hljs-string">&quot;C&quot;</span>),Not(:tag)]                  
+         <span class="hljs-keyword">end</span>
+                   
+	<span class="hljs-comment">#we separate values according to nace4 and nace2 (they include missing values)    </span>
+	dff4 = <span class="hljs-meta">@pipe</span> df[length.(df.nace).==<span class="hljs-number">4</span>,:] |&gt;
+                 rename(_, :nace =&gt; :nace4)
+    dff4[!,:nace2] = <span class="hljs-built_in">SubString</span>.(dff4.nace4,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>) 
+    dff2 = <span class="hljs-meta">@pipe</span> df[length.(df.nace).==<span class="hljs-number">2</span>,:] |&gt;
+                rename(_, :nace =&gt; :nace2, :erev =&gt; :erev2)
+    leftjoin!(dff4,dff2,on=[:ctry,:year,:nace2])
+	
+    dff4[!,:erev] = replace(dff4.erev, <span class="hljs-literal">nothing</span> =&gt; <span class="hljs-literal">missing</span>)
+    dff4[!,:erev2] = replace(dff4.erev2, <span class="hljs-literal">nothing</span> =&gt; <span class="hljs-literal">missing</span>)
+    dff4[!,:missone] = ((ismissing.(dff4.erev).==<span class="hljs-number">1</span>) .| (ismissing.(dff4.erev2).==<span class="hljs-number">1</span>))
+	<span class="hljs-keyword">return</span> dff4
+<span class="hljs-keyword">end</span>
+
+
+<span class="hljs-comment">###############################################</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment">#		PROCEDURE</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment">###############################################</span>
+
+
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment"># 1a) NO MISSING VALUES</span>
+<span class="hljs-comment">##################################################</span>
+
+dff4 = euroclean(baselineyear)
+
+<span class="hljs-comment">#=  `:rsh42` -&gt; it stores the values that are final because don&#x27;t have any problem in Eurostat.
+     we identify values to be comptued with `-1` =#</span>
+dff4[!,:rsh42] = ifelse.(dff4.missone.==<span class="hljs-literal">false</span>, dff4.erev ./ dff4.erev2 , -<span class="hljs-number">1.0</span>)
+
+<span class="hljs-comment">#=  For countries-nace2 with no missing values:
+    The sum of its shares do not necessarily sum to one, due to rounding by Eurostat.     
+    We correct for this. =#</span> 
+transform!(groupby(dff4,[:ctry,:nace2]), :missone =&gt; (y-&gt; any((x-&gt;x.==<span class="hljs-literal">true</span>), y) )=&gt;  :nace2_with_issue)
+
+dff4.rsh42 = <span class="hljs-keyword">let</span> dff4 = copy(dff4)
+    temp = view(dff4,dff4.nace2_with_issue.==<span class="hljs-number">0</span>,:)
+    transform!(groupby(temp,[:ctry,:nace2]), :rsh42 =&gt; (x -&gt; sum(x .* (x.!=-<span class="hljs-number">1</span>))) =&gt; :Tnewsh2)
+    temp.rsh42 = temp.rsh42 ./ temp.Tnewsh2
+    dff4.rsh42
+    <span class="hljs-keyword">end</span>
+
+<span class="hljs-comment">#=  we specify the remaining share to be explained in each nace4 
+    and correct for approximation errors when `nace2_with_issue.==0` =#</span>
+transform!(groupby(dff4,[:ctry,:nace2]), :rsh42 =&gt; (x -&gt; <span class="hljs-number">1</span> - sum(x .* (x.!=-<span class="hljs-number">1</span>))) =&gt; :remsh2)
+temp = view(dff4,(dff4.nace2_with_issue.==<span class="hljs-number">0</span>),:)
+    temp.remsh2 .= <span class="hljs-number">0.0</span>
+
+
+
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment"># 1b) PARTICULAR INDUSTRIES</span>
+<span class="hljs-comment">##################################################</span>
+
+<span class="hljs-keyword">function</span> particular(dff4) 
+    transform!(groupby(dff4,[:ctry,:nace2]), nrow =&gt; :nrind42)
+
+    <span class="hljs-comment"># We deal with cases having zeroes</span>
+        <span class="hljs-comment"># CASE: 0s as revenue of NACE2</span>
+        temp1 = view(dff4,isequal.(dff4.erev2,<span class="hljs-number">0.0</span>),:)
+            temp1.remsh2 .= <span class="hljs-number">0.0</span>
+            temp1.rsh42  .= <span class="hljs-number">0.0</span> <span class="hljs-comment">#any value that we can multiply by zero and get zero revenue</span>
+            temp1.missone = temp1.nace2_with_issue .= <span class="hljs-literal">false</span>
+
+        <span class="hljs-comment"># CASE: 0s as revenue of NACE4</span>
+        temp1 = view(dff4,isequal.(dff4.erev,<span class="hljs-number">0.0</span>),:)
+            temp1.rsh42 .= <span class="hljs-number">0.0</span>
+            temp1.missone .= <span class="hljs-literal">false</span>
+            
+        <span class="hljs-comment">#=  CASE: 0s as revenue of NACE4 and two industries 
+            (we identify the remaining share) =#</span>
+        dff4 = <span class="hljs-keyword">let</span> dff4 = copy(dff4)
+                    aux = <span class="hljs-meta">@pipe</span> (isequal.(dff4.erev,<span class="hljs-number">0.0</span>) .&amp; (dff4.nrind42.==<span class="hljs-number">2</span>)) |&gt;
+                                    unique(dff4[_,[:ctry,:nace2]])
+                    aux[!,:tag] .= <span class="hljs-literal">true</span> 
+                    leftjoin!(dff4,aux,on=[:ctry,:nace2])
+
+                    temp1 = view(dff4, isequal.(dff4.tag, <span class="hljs-literal">true</span>) ,:)
+                        temp1[ismissing.(temp1.erev),:rsh42] .= <span class="hljs-number">1.0</span>        
+                        temp1.missone .= temp1.nace2_with_issue .= <span class="hljs-literal">false</span>
+                        temp1.remsh2  .= <span class="hljs-number">0.0</span>
+                    dff4[:,Not(:tag)]
+                <span class="hljs-keyword">end</span>
+            
+    <span class="hljs-comment"># CASE: one 4-digit industry within NACE2</span>
+    temp1 = view(dff4, dff4.nrind42.==<span class="hljs-number">1</span> ,:)
+        temp1.missone = temp1.nace2_with_issue .= <span class="hljs-literal">false</span>        
+        temp1.rsh42  .= <span class="hljs-number">1.0</span>
+        temp1.remsh2 .= <span class="hljs-number">0.0</span>
+
+    <span class="hljs-comment">#= CASE: These are some rare cases (for Romania), where 
+             there&#x27;s only one nace4 with an issue within nace2, so we can easily recover it.=#</span>             
+    transform!(groupby(dff4,[:ctry,:nace2]), :missone =&gt; sum =&gt; :nrissues4)
+    temp = view(dff4,(isequal.(dff4.nrissues4,<span class="hljs-number">1</span>)) .&amp; (dff4.rsh42.==-<span class="hljs-number">1</span>),:)
+        temp.rsh42 = ifelse.(temp.remsh2.&gt;<span class="hljs-number">0</span>, temp.remsh2, <span class="hljs-number">0.0</span>)
+    temp = view(dff4,isequal.(dff4.nrissues4,<span class="hljs-number">1</span>),:)
+        transform!(groupby(temp,[:ctry,:nace2]), :rsh42 =&gt; (x -&gt; sum(x .* (x.!=-<span class="hljs-number">1</span>))) =&gt; :Tnewsh2)
+           temp.missone = temp.nace2_with_issue .= <span class="hljs-literal">false</span>
+           temp.remsh2 .= <span class="hljs-number">0.0</span>
+           temp.rsh42 = temp.rsh42 ./ temp.Tnewsh2
+
+    <span class="hljs-comment">#= we store the nr of issues to solve, instead of `nace2_with_issue` 
+        `nace2_with_issue.==true` will coincide with `nrissues4.==0` =#</span>
+    transform!(groupby(dff4,[:ctry,:nace2]), :missone =&gt; sum =&gt; :nrissues4)
+    <span class="hljs-keyword">return</span> dff4[:,[:ctry,:nace4,:nace2,:missone,:rsh42,:remsh2,:nrissues4]]
+<span class="hljs-keyword">end</span>
+
+dff4 = particular(copy(dff4))
+
+
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment"># 2) WE USE RELATIVE SHARES of PREVIOUS YEARS FROM EUROSTAT</span>
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment">#= We now we deal with those nace4 where `dff4.nrissues4.!=0` 
+    (in fact, there will be at least two issues per nace2).
+   The following function prepares `dfx`, providing for nace4 from other years in Eurostat .=#</span>
+
+<span class="hljs-keyword">function</span> create_data(yr,dff4)
+    dfx = dropmissing(euroclean(yr))[:,Not(:missone)]
+        <span class="hljs-keyword">if</span> isempty(dfx) == <span class="hljs-number">1</span> <span class="hljs-literal">nothing</span> <span class="hljs-keyword">else</span>
+    dfx[!,:rr42] = ifelse.(isequal.(dfx.erev,<span class="hljs-number">0</span>), <span class="hljs-number">0.0</span>, dfx.erev ./ dfx.erev2)
+    dfx = dfx[:,[:ctry,:nace4,:rr42]]
+
+    dfx = leftjoin(dff4,dfx,on=[:ctry,:nace4])
+
+    <span class="hljs-comment">#we identify the new info and classify the cases</span>
+    temp = view(dfx,dfx.missone.==<span class="hljs-literal">true</span>,:)
+        temp[!,:newinfo] = (ismissing.(temp.rr42).==<span class="hljs-number">0</span>) .&amp; (temp.missone.==<span class="hljs-literal">true</span>)
+    transform!(groupby(dfx,[:ctry,:nace2]),	:newinfo =&gt; sum ∘ skipmissing =&gt; :nrinfo4) 
+    dfx[!,:nrpending] = dfx.nrissues4 .- dfx.nrinfo4
+    
+    size(dfx)[<span class="hljs-number">1</span>]==<span class="hljs-number">0</span> ? (<span class="hljs-keyword">return</span> dff4) : (dfx = dfx[:,Not([:missone,:nrinfo4])])
+            
+    <span class="hljs-keyword">end</span> 
+    <span class="hljs-keyword">return</span> dfx
+<span class="hljs-keyword">end</span>
+
+
+        
+<span class="hljs-comment"># using the info from Eurostat of other years</span>
+<span class="hljs-keyword">function</span> compute_eurostat(yr,dff4)
+    dfx = create_data(yr,dff4) 
+        <span class="hljs-keyword">if</span> size(dfx)[<span class="hljs-number">1</span>]==<span class="hljs-number">0</span> <span class="hljs-keyword">return</span> dff4    
+    <span class="hljs-keyword">else</span>
+        
+    <span class="hljs-comment">#we keep the relevant info</span>
+    temp = view(dfx,(dfx.nrpending.&lt;<span class="hljs-number">2</span>) .&amp; (ismissing.(dfx.newinfo).==<span class="hljs-number">0</span>),:)
+    transform!(groupby(temp,[:ctry,:nace2]),:rr42 =&gt; sum ∘ skipmissing =&gt; :Tnewsh2)
+
+    <span class="hljs-comment">#CASE 1: we can recover all the remaining shares</span>
+    temp1 = view(temp,temp.nrpending.==<span class="hljs-number">0</span>,:)
+    temp1.rsh42 = temp1.rr42 .* temp1.remsh2 ./ temp1.Tnewsh2
+    temp1.remsh2 .= <span class="hljs-number">0.0</span>
+    temp1.nrissues4 .= <span class="hljs-number">0</span>
+
+    
+    <span class="hljs-comment">#CASE 2: we can recover all but one remaining share, and dfx.remsh2 &gt; dfx.Tnewsh2</span>
+    temp2 = view(temp,(temp.nrpending.==<span class="hljs-number">1</span>) .&amp; (temp.remsh2 .&gt;= temp.Tnewsh2),:)
+    temp2.rsh42 = temp2.rr42 
+    [(temp2.rsh42[i] = temp2.remsh2[i] - temp2.Tnewsh2[i]) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> eachindex(temp2.nace4) <span class="hljs-keyword">if</span> (ismissing(temp2.rr42[i])==<span class="hljs-number">1</span>)]
+    temp2.remsh2 .= <span class="hljs-number">0.0</span>
+    temp2.nrissues4 .= <span class="hljs-number">0</span>
+        
+    <span class="hljs-keyword">end</span>
+    
+    dfx[!,:missone] = (dfx.rsh42.==-<span class="hljs-number">1</span>)
+    dfx = dfx[:,Not([:rr42,:newinfo,:nrpending])]
+    <span class="hljs-keyword">return</span> dfx
+<span class="hljs-keyword">end</span>
+
+
+
+<span class="hljs-keyword">if</span> baselineyear &lt; <span class="hljs-number">2019</span>
+    <span class="hljs-keyword">for</span> year <span class="hljs-keyword">in</span> [baselineyear + <span class="hljs-number">1</span>, baselineyear - <span class="hljs-number">1</span>, baselineyear - <span class="hljs-number">2</span>]
+        dff4 = compute_eurostat(year,dff4)
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-keyword">for</span> year <span class="hljs-keyword">in</span> [baselineyear - <span class="hljs-number">1</span>, baselineyear - <span class="hljs-number">2</span>]
+        dff4 = compute_eurostat(year,dff4)
+    <span class="hljs-keyword">end</span> 
+<span class="hljs-keyword">end</span>
+	
+
+
+
+
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment"># 3) WE USE RELATIVE SHARES FROM ORBIS</span>
+<span class="hljs-comment">##################################################</span>
+
+<span class="hljs-comment"># we load the data (cross-section data from orbis)</span>
+odf4 = <span class="hljs-meta">@pipe</span> [DataFrame(CSV.File(<span class="hljs-string">&quot;<span class="hljs-subst">$(dir_info_orbis)</span>\\cross\\<span class="hljs-subst">$(name_country)</span>_cross_<span class="hljs-subst">$(baselineyear)</span>.csv&quot;</span>;
+                        select=[:year,:ctry,:id,:nace4,:rev,:manuf], types=<span class="hljs-built_in">Dict</span>(:nace4=&gt;String7)))  
+                        <span class="hljs-keyword">for</span> name_country <span class="hljs-keyword">in</span> dn.nctry] |&gt;
+             vcat(_...) |&gt;
+             transform(_,:nace4 =&gt; (x-&gt;<span class="hljs-built_in">SubString</span>.(x,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>)) =&gt; :nace2) |&gt;
+             _[<span class="hljs-number">10</span> .&lt;= tryparse.(<span class="hljs-built_in">Int64</span>,_.nace2) .&lt;= <span class="hljs-number">33</span>,: ]
+
+
+[transform!(groupby(odf4,[<span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;nace<span class="hljs-subst">$(i)</span>&quot;</span>),:ctry]), :rev =&gt; sum =&gt; <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;orev<span class="hljs-subst">$(i)</span>&quot;</span>)) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-number">2</span>,<span class="hljs-number">4</span>]]
+
+odf4 = unique(odf4[:,[:ctry,:nace4,:nace2,:orev2,:orev4]])
+
+
+<span class="hljs-comment"># we use orbis dataset to compute shares</span>
+leftjoin!(dff4,odf4[:,[:ctry,:nace4,:orev4,:orev2]],on=[:ctry,:nace4])
+
+temp1 = view(dff4, ismissing.(dff4.orev4),:)
+    temp1.orev4 .= <span class="hljs-number">0</span>
+    temp1.orev2 .= <span class="hljs-number">0</span>
+
+dff4[!,:osh42] = ifelse.((dff4.orev4.==<span class="hljs-number">0</span>), <span class="hljs-number">0</span>, dff4.orev4 ./ dff4.orev2)
+
+temp1 = view(dff4, dff4.missone.==<span class="hljs-literal">true</span>,:)
+    transform!(groupby(temp1,[:ctry,:nace2]), :osh42 =&gt; sum =&gt; :Tnewsh2)
+    temp1.rsh42 = temp1.osh42 ./ temp1.Tnewsh2 .* temp1.remsh2
+    
+
+
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment"># 4) WE SAVE THE RESULTS</span>
+<span class="hljs-comment">##################################################</span>
+dff4[!,:year] .= baselineyear
+dff4 = <span class="hljs-meta">@pipe</span> dff4[:,[:year,:ctry,:nace4,:nace2,:rsh42]] |&gt;
+             sort(_,[:ctry,:nace4])
+
+    <span class="hljs-keyword">return</span> dff4
+<span class="hljs-keyword">end</span></code></pre> </p>
 
 <p>      </div>
     </div>
@@ -134,7 +491,206 @@ pre code.hljs.plaintext {
     <div class="row">
       <div class="col-lg-11 mx-auto">
         <h2>`RelativeShare21.jl`</h2><a id="share21" class="anchor"></a> The following is the procedure for computing a 2-digits sector&#39;s revenue share relative to manufacturing.</p>
-<p><p><span style="color:red;">// Couldn't find a file when trying to resolve an input request with relative path: `/_assets/scripts/RelativeShare21.jl`. //</span></p> </p>
+<p><pre><code class="julia hljs"><span class="hljs-keyword">using</span> DataFrames
+<span class="hljs-keyword">using</span> CSV
+<span class="hljs-keyword">using</span> <span class="hljs-built_in">Pipe</span>
+
+<span class="hljs-comment">#= 	This code creates the function `create_dff2`.
+	It provides revenue shares at 2-digits NACE level relative to manufacturing revenue.=#</span>
+
+<span class="hljs-keyword">function</span> create_dff2(baselineyear,dn,dir_info_eurostat,dir_info_orbis)
+
+
+<span class="hljs-comment">###############################################</span>
+<span class="hljs-comment">#	 CLEANING FUNCTION FOR SBS EUROSTAT DATA</span>
+<span class="hljs-comment">###############################################</span>
+<span class="hljs-keyword">function</span> euroclean(yr)
+	df = <span class="hljs-meta">@pipe</span> DataFrame(CSV.File(<span class="hljs-string">&quot;<span class="hljs-subst">$(dir_info_eurostat)</span>\\turnover\\sbs_na_ind_r2_1_2005-2020.csv&quot;</span>; 
+                            select=[:TIME,:GEO,:INDIC_SB,:NACE_R2,:Value])) |&gt;
+	           _[(<span class="hljs-keyword">in</span>(dn.cctry).(_.GEO)) .&amp; (_.TIME.&gt;<span class="hljs-number">2007</span>) .&amp; (_.INDIC_SB.==<span class="hljs-string">&quot;V12110&quot;</span>),:] <span class="hljs-comment">#turnover from Eurostat&#x27;s page</span>
+
+	<span class="hljs-comment">#we start by minimally cleaning the dataset</span>
+	df = <span class="hljs-meta">@pipe</span>  DataFrame(year=df[:,:TIME],ctry=df[:,:GEO],nace=df[:,:NACE_R2],prod=df[:,:Value]) |&gt;
+				_[(_.year.==yr) .&amp; ((startswith).(_.nace,<span class="hljs-string">&quot;C&quot;</span>)),:]  <span class="hljs-comment"># we keep manufacturing</span>
+	df[!,:prod] = replace.(df.prod, <span class="hljs-string">&quot;,&quot;</span> =&gt; <span class="hljs-string">&quot;&quot;</span>) <span class="hljs-comment">#the data is presented with a comma</span>
+	[df.nace[i] = replace(df.nace[i], <span class="hljs-string">&quot;C&quot;</span> =&gt; <span class="hljs-string">&quot;&quot;</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> eachindex(df.nace) <span class="hljs-keyword">if</span> isequal(df.nace[i],<span class="hljs-string">&quot;C&quot;</span>)==<span class="hljs-number">0</span>]
+
+	df[:,:erev] = tryparse.(<span class="hljs-built_in">Float64</span>,string.(df.prod)) 	
+	[df.erev[i]  = df.erev[i]*<span class="hljs-number">1e6</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> eachindex(df.erev) <span class="hljs-keyword">if</span> isnothing(df.erev[i])==<span class="hljs-number">0</span>] <span class="hljs-comment"># value is in millions, so we reconvert them</span>
+	df = df[:,Not(<span class="hljs-string">&quot;prod&quot;</span>)]
+
+    <span class="hljs-comment">#=  We discard countries that have no info for that year.
+        This is decided based on whether they report manuf data. =#</span>
+    df = <span class="hljs-keyword">let</span>
+            temp1         = copy(df[df.nace.==<span class="hljs-string">&quot;C&quot;</span>,:])
+            temp1[!,:tag] = isnothing.(temp1.erev).==<span class="hljs-number">0</span>
+            temp2         = temp1[:,[:year,:ctry,:tag]]
+            <span class="hljs-meta">@pipe</span> leftjoin(df,temp2,on=[:year,:ctry]) |&gt;
+                    _[_.tag.==<span class="hljs-literal">true</span>,Not(:tag)] 
+         <span class="hljs-keyword">end</span>
+			
+	<span class="hljs-comment"># `manuf_rev` -&gt; total manuf revenue</span>
+    df = <span class="hljs-meta">@pipe</span>  unique(df[(df.nace.==<span class="hljs-string">&quot;C&quot;</span>),[:erev,:year,:ctry]]) |&gt;
+                rename(_, :erev =&gt; :manuf_rev) |&gt;
+                leftjoin(df[df.nace.!=<span class="hljs-string">&quot;C&quot;</span>,:],_,on=[:year,:ctry])
+            
+	<span class="hljs-comment">#we split values according to nace2 (it includes missing values)</span>
+	dff2 = <span class="hljs-meta">@pipe</span> df[length.(df.nace).==<span class="hljs-number">2</span>,:] |&gt;
+                rename(_, :nace =&gt; :nace2)
+    dff2[!,:erev] = replace(dff2.erev, <span class="hljs-literal">nothing</span> =&gt; <span class="hljs-literal">missing</span>)
+    dff2[!,:mis] = (ismissing.(dff2.erev)) 
+	<span class="hljs-keyword">return</span> dff2
+<span class="hljs-keyword">end</span>
+
+
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment"># 1) WE LOAD DATA FROM EUROSTAT FOR THE BASELINE YEAR</span>
+<span class="hljs-comment">##################################################</span>
+dff2 = euroclean(baselineyear)
+
+
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment"># 1a) NO MISSING VALUES</span>
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment">#  `:rsh2` -&gt; it stores the values that are final because don&#x27;t have any problem in Eurostat.      </span>
+dff2[!,:rsh2] = ifelse.(dff2.mis.==<span class="hljs-number">0</span>, dff2.erev ./ dff2.manuf_rev, -<span class="hljs-number">1.0</span>)
+
+
+<span class="hljs-comment">#=  For countries with no missing values:
+    The sum of its shares do not necessarily sum to one, due to rounding by Eurostat.     
+    We correct for this. =#</span> 
+transform!(groupby(dff2,[:ctry]), :mis =&gt; (y-&gt; any((x-&gt;x.==<span class="hljs-literal">true</span>), y) )=&gt;  :ctry_with_issue)
+
+dff2.rsh2 = <span class="hljs-keyword">let</span> dff2 = copy(dff2)
+    temp = view(dff2,dff2.ctry_with_issue.==<span class="hljs-number">0</span>,:)
+    transform!(groupby(temp,[:ctry]), :rsh2 =&gt; (x -&gt; sum(x .* (x.!=-<span class="hljs-number">1</span>))) =&gt; :Tnewsh)
+    temp.rsh2 = temp.rsh2 ./ temp.Tnewsh
+    dff2.rsh2
+            <span class="hljs-keyword">end</span>
+
+<span class="hljs-comment">#=  we specify the remaining share to be explained in each nace4 
+    and correct for approximation errors when `nace2_with_issue.==0` =#</span>
+transform!(groupby(dff2,[:ctry]), :rsh2 =&gt; (x -&gt; <span class="hljs-number">1</span> - sum(x .* (x.!=-<span class="hljs-number">1</span>))) =&gt; :remsh)
+temp = view(dff2,(dff2.ctry_with_issue.==<span class="hljs-number">0</span>),:)
+    temp.remsh .= <span class="hljs-number">0.0</span>
+
+<span class="hljs-comment">#=  we store the nr of issues to solve, instead of `ctry_with_issue`.
+    ctry_with_issue.==true` will coincide with `nrissues2.==0` =#</span>        
+transform!(groupby(dff2,[:ctry]), :mis =&gt; sum =&gt; :nrissues2)
+
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment"># 1b) FUNCTION FOR MISSING VALUES USING PREVIOUS YEARS FROM EUROSTAT</span>
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment">#=  This function fixes those values where:
+    * we can recover all the remaining shares 
+    * there&#x27;s only one missing remaining share and 
+        the remaining share to be explained (`remsh2) is higher than the sum of shares coming from previous years (`Tnewsh2`)=#</span>
+
+
+<span class="hljs-comment">#=  This function prepares the data from Eurostat to eventually correct missing values.
+    It prepares a dataset `a1` with countries for which there&#x27;s new info from previous years that we can use.=#</span>
+<span class="hljs-keyword">function</span> create_data(yr,dff2)
+	dfx = dropmissing(euroclean(yr))[:,Not(:mis)]
+        <span class="hljs-keyword">if</span> isempty(dfx) == <span class="hljs-number">1</span> <span class="hljs-literal">nothing</span> <span class="hljs-keyword">else</span>
+    dfx[!,:rr2] = ifelse.(isequal.(dfx.erev,<span class="hljs-number">0</span>), <span class="hljs-number">0.0</span>, dfx.erev ./ dfx.manuf_rev)
+    dfx = dfx[:,[:ctry,:nace2,:rr2]]
+
+    dfx = leftjoin(dff2,dfx,on=[:ctry,:nace2])
+
+    <span class="hljs-comment">#we identify the new info and classify the cases</span>
+    temp = view(dfx,dfx.mis.==<span class="hljs-literal">true</span>,:)
+        temp[!,:newinfo] = (ismissing.(temp.rr2).==<span class="hljs-number">0</span>) .&amp; (temp.mis.==<span class="hljs-literal">true</span>)
+    transform!(groupby(dfx,[:ctry]),  :newinfo =&gt; sum ∘ skipmissing =&gt; :nrinfo2) 
+    dfx[!,:nrpending] = dfx.nrissues2 .- dfx.nrinfo2
+    
+    size(dfx)[<span class="hljs-number">1</span>]==<span class="hljs-number">0</span> ? (<span class="hljs-keyword">return</span> dff4) : (dfx = dfx[:,Not([:mis,:nrinfo2])])
+
+    <span class="hljs-keyword">end</span>    
+    <span class="hljs-keyword">return</span> dfx
+<span class="hljs-keyword">end</span>
+
+
+<span class="hljs-keyword">function</span> compute_eurostat2(yr,dff2)
+    dfx = create_data(yr,dff2)
+        <span class="hljs-keyword">if</span> size(dfx)[<span class="hljs-number">1</span>]==<span class="hljs-number">0</span> <span class="hljs-keyword">return</span> dff2    
+    <span class="hljs-keyword">else</span>
+        
+    <span class="hljs-comment">#we keep the relevant info</span>
+    temp = view(dfx,(dfx.nrpending.&lt;=<span class="hljs-number">1</span>) .&amp; (ismissing.(dfx.newinfo).==<span class="hljs-number">0</span>),:)
+    transform!(groupby(temp,[:ctry]),:rr2 =&gt; sum ∘ skipmissing =&gt; :Tnewsh)
+
+    <span class="hljs-comment">#CASE 1: we can recover all the remaining shares</span>
+    temp1 = view(temp,temp.nrpending.==<span class="hljs-number">0</span>,:)
+    temp1.rsh2 = temp1.rr2 .* temp1.remsh ./ temp1.Tnewsh
+    temp1.remsh .= <span class="hljs-number">0.0</span>
+    temp1.nrissues2 .= <span class="hljs-number">0</span>
+
+    
+    <span class="hljs-comment">#CASE 2: we can recover all but one remaining share, and dfx.remsh2 &gt; dfx.Tnewsh2</span>
+    temp2 = view(temp,(temp.nrpending.==<span class="hljs-number">1</span>) .&amp; (temp.remsh .&gt;= temp.Tnewsh),:)
+    temp2.rsh2 = temp2.rr2
+    [(temp2.rsh2[i] = temp2.remsh[i] - temp2.Tnewsh[i]) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> eachindex(temp2.nace2) <span class="hljs-keyword">if</span> (ismissing(temp2.rr2[i])==<span class="hljs-number">1</span>)]
+    temp2.remsh .= <span class="hljs-number">0.0</span>
+    temp2.nrissues2 .= <span class="hljs-number">0</span>
+        
+    <span class="hljs-keyword">end</span>
+    
+    dfx[!,:mis] = (dfx.rsh2.==-<span class="hljs-number">1</span>)
+    dfx = dfx[:,Not([:rr2,:newinfo,:nrpending])]
+    <span class="hljs-keyword">return</span> dfx
+<span class="hljs-keyword">end</span>
+
+
+
+<span class="hljs-keyword">if</span> baselineyear &lt; <span class="hljs-number">2019</span>
+    <span class="hljs-keyword">for</span> year <span class="hljs-keyword">in</span> [baselineyear + <span class="hljs-number">1</span>, baselineyear - <span class="hljs-number">1</span>, baselineyear - <span class="hljs-number">2</span>]
+        dff2 = compute_eurostat2(year,dff2)
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-keyword">for</span> year <span class="hljs-keyword">in</span> [baselineyear - <span class="hljs-number">1</span>, baselineyear - <span class="hljs-number">2</span>]
+        dff2 = compute_eurostat2(year,dff2)
+    <span class="hljs-keyword">end</span> 
+<span class="hljs-keyword">end</span>
+
+
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment"># 3) WE USE RELATIVE SHARES FROM ORBIS</span>
+<span class="hljs-comment">##################################################</span>
+
+<span class="hljs-comment"># we load the data (cross-section data from orbis)</span>
+odf2 = <span class="hljs-meta">@pipe</span> [DataFrame(CSV.File(<span class="hljs-string">&quot;<span class="hljs-subst">$(dir_info_orbis)</span>\\cross\\<span class="hljs-subst">$(name_country)</span>_cross_<span class="hljs-subst">$(baselineyear)</span>.csv&quot;</span>;
+                        select=[:year,:ctry,:id,:nace4,:rev,:manuf], types=<span class="hljs-built_in">Dict</span>(:nace4=&gt;String7)))  
+                        <span class="hljs-keyword">for</span> name_country <span class="hljs-keyword">in</span> dn.nctry] |&gt;
+             vcat(_...) |&gt;
+             transform(_,:nace4 =&gt; (x-&gt;<span class="hljs-built_in">SubString</span>.(x,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>)) =&gt; :nace2) |&gt;
+             _[<span class="hljs-number">10</span> .&lt;= tryparse.(<span class="hljs-built_in">Int64</span>,_.nace2) .&lt;= <span class="hljs-number">33</span>,: ] 
+    
+odf2 = <span class="hljs-meta">@pipe</span> transform(groupby(odf2,[:ctry,:nace2]), :rev =&gt; sum =&gt; :orev2) |&gt;
+             transform(groupby(_,[:ctry]), :orev2 =&gt; sum =&gt; :orev1) |&gt;
+             unique(_[:,[:ctry,:nace2,:orev2,:orev1]])
+
+
+<span class="hljs-comment"># we use orbis dataset to compute shares</span>
+leftjoin!(dff2,odf2,on=[:ctry,:nace2])
+
+dff2[ismissing.(dff2.orev2),:orev2] .= <span class="hljs-number">0.0</span>
+dff2[!,:osh2] = ifelse.((dff2.orev2.==<span class="hljs-number">0</span>), <span class="hljs-number">0</span> , dff2.orev2 ./ dff2.orev1)
+
+temp1 = view(dff2, dff2.mis.==<span class="hljs-literal">true</span>,:)
+    transform!(groupby(temp1,[:ctry]), :osh2 =&gt; sum =&gt; :Tnewsh)
+    temp1.rsh2 = temp1.osh2 ./ temp1.Tnewsh .* temp1.remsh
+    
+
+<span class="hljs-comment">##################################################</span>
+<span class="hljs-comment"># 		2b) WE SAVE THE RESULTS</span>
+<span class="hljs-comment">##################################################</span>
+dff2 = <span class="hljs-meta">@pipe</span> dff2[:,[:ctry,:year,:nace2,:rsh2,:manuf_rev]] |&gt;
+			 sort(_,[:ctry,:nace2])
+rename!(dff2, :rsh2 =&gt; :rsh21)
+
+
+    <span class="hljs-keyword">return</span> dff2
+<span class="hljs-keyword">end</span></code></pre> </p>
 <p>      </div>
     </div>
   </div>
