@@ -682,7 +682,7 @@ temp1 = view(dff2, dff2.mis.==<span class="hljs-literal">true</span>,:)
     
 
 <span class="hljs-comment">##################################################</span>
-<span class="hljs-comment"># 		2b) WE SAVE THE RESULTS</span>
+<span class="hljs-comment"># 		4) WE SAVE THE RESULTS</span>
 <span class="hljs-comment">##################################################</span>
 dff2 = <span class="hljs-meta">@pipe</span> dff2[:,[:ctry,:year,:nace2,:rsh2,:manuf_rev]] |&gt;
 			 sort(_,[:ctry,:nace2])
