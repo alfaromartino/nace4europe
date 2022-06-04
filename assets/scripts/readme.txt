@@ -12,4 +12,4 @@ The variables in `RevenueManufacture_NACE4.csv` are:
 `share2` 	-> revenue share of the corresponding `nace2` industry relative to manufacturing
 `revenue2` 	-> revenue in Euros of the corresponding `nace2` industry relative to manufacturing
 
-`manuf_revenue` -> revenue in manufacturing of the country-year.
+`manuf_revenue` -> manufacturing revenue of the country-year.
