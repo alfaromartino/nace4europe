@@ -43,9 +43,9 @@ The procedure consists of the following steps. Define an _industry_ by its NACE 
 
 
 
-The estimates are especially relevant for the years 2016-2018, since ORBIS' information has been improving over the years (2019 has the issue of only using previous years from Eurostat rather than contiguous ones, to avoid using data during the pandemic). Furthermore, the richness of ORBIS depends on the country considered, since its coverage varies by country. \\
+The estimates are especially relevant for the years 2016-2018, since ORBIS' information has been improving over the years (2019 has the issue of only using previous years from Eurostat rather than contiguous ones, to avoid using data from the pandemic). Furthermore, the data richness of ORBIS depends on the country considered, since its coverage varies by country. \\
 
-ORBIS coverage is particularly rich for the following **countries**:  Bulgaria, Croatia, Czech Republic, Finland, France, UK, Hungary, Italy, Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, and Sweden. Despite its importance, Germany's coverage in ORBIS is relatively low. The following tables show each country's revenue in ORBIS relative to Eurostat (year 2018).
+ORBIS coverage is particularly rich for the following **countries**:  Bulgaria, Croatia, Czech Republic, Finland, France, UK, Hungary, Italy, Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, and Sweden. On the contrary, Germany's coverage in ORBIS is relatively low, despite its importance. The following tables show each country's revenue in ORBIS relative to Eurostat for the year 2018.
 
 ~~~<div style="text-align:center;">
 <img src="/assets/scripts/ind_rev_orbis_west.svg" width="70%" />
