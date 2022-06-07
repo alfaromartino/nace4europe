@@ -53,7 +53,7 @@ ORBIS coverage is particularly rich for the following **countries**:  Bulgaria, 
 \\
 \\
 ~~~<div style="text-align:center;">
-<img src="/assets/scripts/ind_rev_orbis_east.svg" width="80%"  />
+<img src="/assets/scripts/without_german.png" width="80%" />
 <div style="text-align:justify;">
 ~~~
 
