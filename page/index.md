@@ -48,7 +48,8 @@ The estimates are especially relevant for the years 2016-2018, since ORBIS' info
 ORBIS coverage is particularly rich for the following **countries**:  Bulgaria, Croatia, Czech Republic, Finland, France, UK, Hungary, Italy, Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, and Sweden. On the contrary, Germany's coverage in ORBIS is relatively low, despite its importance. The following tables show each country's revenue in ORBIS relative to Eurostat for the year 2018.
 
 
-~~~<div style="text-align:center;">
+~~~
+<div style="text-align:center;">
 <img src="/_assets/scripts/without_german.svg" width="80%" />
 <div style="text-align:justify;">
 ~~~
