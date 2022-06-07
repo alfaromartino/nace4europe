@@ -55,8 +55,6 @@ ORBIS coverage is particularly rich for the following **countries**:  Bulgaria, 
 ~~~
 \\
 \\
-
-
 See [here](/menu2/) for further details about the code and the procedure.
 
 \end{section}
