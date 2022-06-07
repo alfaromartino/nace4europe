@@ -50,7 +50,7 @@ ORBIS coverage is particularly rich for the following **countries**:  Bulgaria, 
 
 ~~~
 <div style="text-align:center;">
-<img src="/assets/scripts/without_german.svg" width="80%" />
+<img src="/assets/scripts/without_german.svg" width="70%" />
 <div style="text-align:justify;">
 ~~~
 \\
